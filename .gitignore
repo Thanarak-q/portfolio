@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Astro build artifacts
+dist/
+.astro/
+project/.astro/
+
+# Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# Local environment and OS files
+.env
+.env.*
+.DS_Store

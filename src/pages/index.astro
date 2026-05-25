@@ -1,0 +1,243 @@
+---
+import Base from "../layouts/Base.astro";
+import ScrollInit from "../components/ScrollInit";
+import HeroClip from "../components/HeroClip";
+import SlideUpClip from "../components/SlideUpClip";
+import HorizontalPanel from "../components/HorizontalPanel";
+import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
+import {
+  aboutLines,
+  aboutStats,
+  contactLines,
+  contactLinks,
+  focusItems,
+  marqueeItems,
+  navLinks,
+  workItems,
+  workLines,
+} from "../lib/portfolioContent";
+---
+
+<Base>
+  <ScrollInit client:load />
+
+  <nav class="nav glass-liquid" aria-label="Primary">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <span>thanarak<span class="role-mini">/ red&nbsp;team</span></span>
+    </div>
+    <div class="nav-links">
+      {navLinks.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </div>
+    <a class="nav-cta" href="#contact">Contact</a>
+  </nav>
+
+  <!-- HERO -->
+  <HeroClip
+    client:load
+    src="/assets/clip-1-scrub.mp4"
+    title="Thanarak"
+    titleItalic="Kanyaprasit"
+    role="Red Team / Offensive Security / AI Security"
+    runwayVH={500}
+    showHint={true}
+    portalEyebrow="CHAPTER 02"
+    portalLabel="who, quietly"
+  />
+
+  <!-- ABOUT -->
+  <section id="about" class="content">
+    <div class="wrap">
+      <RiseIn client:load distance={30}>
+        <div class="eyebrow">01 — Who</div>
+      </RiseIn>
+
+      <LineReveal
+        client:load
+        class="big-statement"
+        lines={aboutLines}
+      />
+
+      <div class="about-grid">
+        <RiseIn client:load distance={60} delay={0.05}>
+          <div class="glass-liquid about-card">
+            <p class="lead about-lead">
+              By day I find the seams where things weren't meant to give way.
+              In between, I keep the camera rolling on a slower hour.
+            </p>
+            <p class="body about-body">
+              I'm an offensive security researcher focused on red-team operations and
+              the new attack surface that arrives with large language models —
+              prompt-level exploits, agent chain abuse, model supply chain. I like the
+              part of the job that feels like film: long stretches of patient watching,
+              then one decisive frame.
+            </p>
+          </div>
+        </RiseIn>
+
+        <div class="about-side">
+          {aboutStats.map((stat, index) => (
+            <RiseIn client:load distance={60} delay={0.1 + index * 0.08}>
+              <div class="glass-liquid stat">
+                <span class="k">{stat.value}</span>
+                <span class="l">{stat.label}</span>
+              </div>
+            </RiseIn>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERLUDE 1 -->
+  <SlideUpClip
+    client:load
+    src="/assets/clip-2-scrub.mp4"
+    eyebrow="Interlude — 00:06 / 00:18"
+    title="Some attacks"
+    titleItalic="look like running."
+    caption="Forward momentum, low to the grass. The fastest path between two systems is rarely the obvious one."
+    runwayVH={400}
+    exitDirection="left"
+  />
+
+  <!-- UP-NEXT bridge -->
+  <section class="up-next">
+    <div class="up-next-inner">
+      <div class="eyebrow">Up next</div>
+      <h2 class="up-next-title">
+        Focus —<br />
+        <em>three rooms, and a fourth.</em>
+      </h2>
+      <p class="up-next-caption">
+        Red Team. AI Security. Cloud &amp; App. Field Notes.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOCUS — horizontal panel -->
+  <div id="focus">
+    <HorizontalPanel
+      client:load
+      sectionHeightVH={420}
+      eyebrow="02 — Focus"
+      title="Three rooms <span class='it'>I keep returning to,</span> and a fourth I share aloud."
+    >
+      {focusItems.map((item) => (
+        <div class="glass-liquid focus-card h-card">
+          <div class="num">{item.number}</div>
+          <h3>
+            {item.title}<br /><span class="it">{item.titleItalic}</span>
+          </h3>
+          <p>{item.description}</p>
+          <div class="tags">
+            {item.tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </HorizontalPanel>
+  </div>
+
+  <!-- INTERLUDE 2 -->
+  <SlideUpClip
+    client:load
+    src="/assets/clip-3-scrub.mp4"
+    eyebrow="Interlude — 00:12 / 00:18"
+    title="The best ones"
+    titleItalic="look like standing still."
+    caption="Patient watching, listening for the soft click. A camera rolling while nothing seems to happen."
+    runwayVH={400}
+  />
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track marquee-track-slow">
+      {marqueeItems.map((item) => (
+        <span class="marquee-item">
+          {item}
+          <span class="marquee-sep">✦</span>
+        </span>
+      ))}
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <section id="work" class="content">
+    <div class="wrap">
+      <RiseIn client:load distance={40}>
+        <div class="eyebrow">03 — Selected work</div>
+      </RiseIn>
+
+      <LineReveal
+        client:load
+        class="big-statement"
+        lines={workLines}
+      />
+
+      <div class="work-list glass-liquid">
+        {workItems.map((item, index) => (
+          <SlideIn
+            client:load
+            dir="right"
+            distance={120}
+            delay={0.04 + index * 0.05}
+          >
+            <div class:list={["row", { "row-sep": index > 0 }]}>
+              <div class="num">{item.number}</div>
+              <div class="title">
+                {item.title}{" "}
+                {item.titleItalic && <span class="it">{item.titleItalic}</span>}
+              </div>
+              <div class="desc">{item.description}</div>
+              <div class="meta">{item.meta}</div>
+            </div>
+          </SlideIn>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="content">
+    <div class="wrap">
+      <RiseIn client:load distance={30}>
+        <div class="eyebrow">04 — Contact</div>
+      </RiseIn>
+
+      <LineReveal
+        client:load
+        class="big-statement"
+        lines={contactLines}
+      />
+
+      <ScaleIn client:load from={0.96} blur={10} class="contact-scale">
+        <div class="glass-liquid contact-card">
+          <p class="body contact-intro">
+            Open to red-team engagements, AI-security research collaborations,
+            and the occasional long walk by a lake.
+          </p>
+          <div class="contact-actions">
+            {contactLinks.map((link) => (
+              <a
+                class="link-pill"
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+              >
+                <span>{link.label}</span><span class="arrow">↗</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </ScaleIn>
+
+      <footer class="foot">
+        © 2026 Thanarak Kanyaprasit · Shot on memory · Built with care
+      </footer>
+    </div>
+  </section>
+</Base>

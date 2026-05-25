@@ -1,0 +1,33 @@
+---
+interface Props {
+  title?: string;
+}
+const { title = "Thanarak Kanyaprasit — Portfolio" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+    <div class="atmo grain" aria-hidden="true"></div>
+    <div class="atmo vignette" aria-hidden="true"></div>
+  </body>
+</html>
+
+<style is:global>
+  @import "../styles/global.css";
+</style>
