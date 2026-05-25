@@ -18,39 +18,36 @@ const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
 const visualTypes = ["target", "stack", "scope", "lens"];
 const isWide = (i: number) => i % 2 === 0;
-const romans = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
 
 export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowProps) {
-  const sectionRef    = useRef<HTMLElement>(null);
-  const introRef      = useRef<HTMLDivElement>(null);
-  const headRef       = useRef<HTMLDivElement>(null);
-  const headLine1Ref  = useRef<HTMLSpanElement>(null);
-  const headLine2Ref  = useRef<HTMLSpanElement>(null);
-  const headEyebrowRef = useRef<HTMLDivElement>(null);
-  const detailRef     = useRef<HTMLDivElement>(null);
-  const viewportRef   = useRef<HTMLDivElement>(null);
-  const trackRef      = useRef<HTMLDivElement>(null);
-  const fillRef       = useRef<HTMLDivElement>(null);
-  const counterRef    = useRef<HTMLSpanElement>(null);
-  const markerRef     = useRef<HTMLDivElement>(null);
-  const markerNumRef  = useRef<HTMLSpanElement>(null);
+  const sectionRef     = useRef<HTMLElement>(null);
+  const introRef       = useRef<HTMLDivElement>(null);
+  const eyebrowARef    = useRef<HTMLSpanElement>(null);
+  const eyebrowBRef    = useRef<HTMLSpanElement>(null);
+  const headRef        = useRef<HTMLDivElement>(null);
+  const headLine1Ref   = useRef<HTMLSpanElement>(null);
+  const headLine2Ref   = useRef<HTMLSpanElement>(null);
+  const detailRef      = useRef<HTMLDivElement>(null);
+  const viewportRef    = useRef<HTMLDivElement>(null);
+  const trackRef       = useRef<HTMLDivElement>(null);
+  const fillRef        = useRef<HTMLDivElement>(null);
+  const counterRef     = useRef<HTMLSpanElement>(null);
 
   useIsomorphicLayoutEffect(() => {
-    const section = sectionRef.current;
-    const intro   = introRef.current;
-    const head    = headRef.current;
-    const line1   = headLine1Ref.current;
-    const line2   = headLine2Ref.current;
-    const heybrow = headEyebrowRef.current;
-    const detail  = detailRef.current;
+    const section  = sectionRef.current;
+    const intro    = introRef.current;
+    const eyeA     = eyebrowARef.current;
+    const eyeB     = eyebrowBRef.current;
+    const head     = headRef.current;
+    const line1    = headLine1Ref.current;
+    const line2    = headLine2Ref.current;
+    const detail   = detailRef.current;
     const viewport = viewportRef.current;
-    const track   = trackRef.current;
-    const fill    = fillRef.current;
-    const counter = counterRef.current;
-    const marker  = markerRef.current;
-    const markerNum = markerNumRef.current;
+    const track    = trackRef.current;
+    const fill     = fillRef.current;
+    const counter  = counterRef.current;
 
-    if (!section || !intro || !head || !line1 || !line2 || !heybrow || !detail || !viewport || !track || !fill || !counter || !marker || !markerNum) return;
+    if (!section || !intro || !eyeA || !eyeB || !head || !line1 || !line2 || !detail || !viewport || !track || !fill || !counter) return;
 
     const measure = () => {
       const vw = window.innerWidth;
@@ -59,9 +56,9 @@ export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowPro
       return {
         cx: vw * (mob ? 0.06 : 0.26),
         cy: vh * (mob ? 0.22 : 0.26),
-        ax: mob ? 16 : 18,
-        ay: mob ? 86 : 92,
-        es: mob ? 0.34 : 0.36,
+        ax: mob ? 16 : 280,
+        ay: mob ? 24 : 32,
+        es: mob ? 0.46 : 0.22,
         travel: Math.max(0, track.scrollWidth - viewport.clientWidth),
       };
     };
@@ -76,45 +73,43 @@ export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowPro
       onUpdate(self) {
         const p = self.progress;
 
-        // ── intro anchor (0.04 → 0.36)
+        // intro anchor (shrinks and travels to head eyebrow slot)
         const ip = easeOut3(clamp01((p - 0.04) / 0.32));
         intro.style.transform = `translate3d(${mix(m.cx, m.ax, ip)}px,${mix(m.cy, m.ay, ip)}px,0) scale(${mix(1, m.es, ip)})`;
-        intro.style.opacity = String(mix(1, 0.86, ip));
+        intro.style.opacity = "1";
 
-        // ── detail panel slides in (cards + sidebar)  (0.24 → 0.42)
+        // eyebrow morph: UP NEXT → 02 — FOCUS
+        const morph = clamp01((p - 0.16) / 0.10);
+        eyeA.style.opacity = String(1 - morph);
+        eyeB.style.opacity = String(morph);
+
+        // detail panel slide-in
         const dp = easeOut3(clamp01((p - 0.24) / 0.18));
         detail.style.transform = `translate3d(${mix(100, 0, dp)}%, 0, 0)`;
         detail.style.opacity   = String(clamp01((p - 0.22) / 0.14));
         detail.style.filter    = `blur(${mix(14, 0, dp)}px)`;
 
-        // ── HEAD reveal — independent clip-path wipe (0.14 → 0.34)
-        const headOpacity = clamp01((p - 0.14) / 0.06);
-        head.style.opacity = String(headOpacity);
-        heybrow.style.transform = `translate3d(0, ${mix(12, 0, headOpacity)}px, 0)`;
+        // head title reveal — clip-path wipe per line (no separate eyebrow now)
+        head.style.opacity = String(clamp01((p - 0.18) / 0.06));
 
-        const wipe1 = easeOut4(clamp01((p - 0.17) / 0.10));
-        const wipe2 = easeOut4(clamp01((p - 0.23) / 0.10));
+        const wipe1 = easeOut4(clamp01((p - 0.20) / 0.10));
+        const wipe2 = easeOut4(clamp01((p - 0.26) / 0.10));
         line1.style.clipPath = `inset(0 ${mix(100, 0, wipe1)}% 0 0)`;
         line2.style.clipPath = `inset(0 ${mix(100, 0, wipe2)}% 0 0)`;
 
-        // ── strip horizontal pan (0.42 → 0.96 — extended range)
+        // horizontal pan (extended range)
         const sp = easeOut3(clamp01((p - 0.42) / 0.54));
         track.style.transform = `translate3d(${-m.travel * sp}px, 0, 0)`;
 
-        // ── progress + counter
+        // counter + progress
         fill.style.transform = `scaleX(${sp})`;
         const active = Math.min(items.length, Math.max(1, Math.ceil(sp * items.length)));
-        const activeStr = String(active).padStart(2, "0");
-        counter.textContent = activeStr;
-
-        // ── sidebar marker glides down the line
-        marker.style.top = `${sp * 100}%`;
-        markerNum.textContent = activeStr;
+        counter.textContent = String(active).padStart(2, "0");
       },
       onRefresh() { m = measure(); },
     });
 
-    // Force refresh after layout settles (handles React hydration timing)
+    // refresh after layout settles (handles hydration timing)
     let rafId1 = 0, rafId2 = 0;
     rafId1 = requestAnimationFrame(() => {
       rafId2 = requestAnimationFrame(() => {
@@ -134,14 +129,6 @@ export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowPro
     };
   }, [items.length]);
 
-  // table of contents: 4 primary rooms + count of extras
-  const toc = items.slice(0, 4).map((item, i) => ({
-    num: romans[i],
-    label: item.title,
-    italic: item.titleItalic,
-  }));
-  const moreCount = Math.max(0, items.length - 4);
-
   return (
     <section
       id="focus"
@@ -151,147 +138,96 @@ export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowPro
     >
       <div className="focus-flow-sticky">
 
-        {/* ── INTRO (anchors top-left) ── */}
+        {/* INTRO — morphing eyebrow (UP NEXT → 02 — FOCUS) */}
         <div ref={introRef} className="focus-flow-intro">
-          <div className="eyebrow">Up next</div>
-          <h2 className="focus-flow-title">
-            Focus —<br />
-            <em>three rooms,</em><br />
-            <em>and a fourth.</em>
-          </h2>
-
-          <div className="focus-flow-divider" aria-hidden="true" />
-
-          <ol className="focus-flow-toc" aria-label="Section index">
-            {toc.map((row) => (
-              <li key={row.num} className="ftoc-row">
-                <span className="ftoc-num">{row.num}</span>
-                <span className="ftoc-text">
-                  {row.label} <em>{row.italic}</em>
-                </span>
-              </li>
-            ))}
-          </ol>
-
-          {moreCount > 0 && (
-            <p className="focus-flow-aside">
-              <span className="ffa-plus">+</span> {moreCount} more notes
-              <em> kept on the side.</em>
-            </p>
-          )}
+          <div className="eyebrow focus-flow-eyebrow">
+            <span className="ffe-stack">
+              <span ref={eyebrowARef} className="ffe-text ffe-a">Up next</span>
+              <span ref={eyebrowBRef} className="ffe-text ffe-b">02 — Focus</span>
+            </span>
+          </div>
         </div>
 
-        {/* ── HEAD (own reveal — clip-path wipe) ── */}
+        {/* HEAD — title only (eyebrow lives in intro now) */}
         <div ref={headRef} className="focus-flow-head-abs">
-          <div ref={headEyebrowRef} className="eyebrow focus-flow-head-eyebrow">02 — Focus</div>
           <h3 className="focus-flow-head-title">
             <span ref={headLine1Ref} className="ffh-line">
               Three rooms I keep returning to,
             </span>
+            {" "}
             <span ref={headLine2Ref} className="ffh-line ffh-line-italic">
               and a fourth I share aloud.
             </span>
           </h3>
         </div>
 
-        {/* ── DETAIL PANEL (slides in) ── */}
+        {/* DETAIL — cards strip + bottom rail (no sidebar) */}
         <div ref={detailRef} className="focus-flow-detail-shell">
           <div className="focus-flow-detail">
 
-            {/* SIDEBAR — vertical line + moving marker */}
-            <aside className="ffd-sidebar">
-              <div className="ffd-sidebar-badge glass-liquid" aria-hidden="true">
-                <span className="ffd-badge-label">FOCUS</span>
-                <span className="ffd-badge-sub">02</span>
-              </div>
+            <div ref={viewportRef} className="ffd-viewport">
+              <div ref={trackRef} className="ffd-track">
+                {items.map((item, i) => {
+                  const wide = isWide(i);
+                  const vtype = wide ? visualTypes[Math.floor(i / 2) % visualTypes.length] : null;
+                  return (
+                    <article
+                      key={item.number}
+                      className={`ffc glass-liquid${wide ? " ffc--wide" : " ffc--narrow"}`}
+                    >
+                      {vtype && (
+                        <div className={`ffc-visual ffc-visual--${vtype}`} aria-hidden="true">
+                          <VisualArt type={vtype} />
+                        </div>
+                      )}
 
-              <div className="ffd-progress-wrap" aria-hidden="true">
-                <div className="ffd-progress-line" />
-                <div className="ffd-progress-stops">
-                  {items.map((_, i) => (
-                    <span key={i} className="ffd-stop" />
-                  ))}
-                </div>
-                <div ref={markerRef} className="ffd-progress-marker">
-                  <span className="ffd-marker-dot" />
-                  <span ref={markerNumRef} className="ffd-marker-num">01</span>
-                </div>
-              </div>
+                      <div className="ffc-ghost" aria-hidden="true">
+                        {String(i + 1).padStart(2, "0")}
+                      </div>
 
-              <div className="ffd-sidebar-foot">
-                <span className="ffd-sidebar-index">ROOMS</span>
-              </div>
-            </aside>
-
-            {/* RIGHT */}
-            <div className="ffd-right">
-
-              {/* viewport */}
-              <div ref={viewportRef} className="ffd-viewport">
-                <div ref={trackRef} className="ffd-track">
-                  {items.map((item, i) => {
-                    const wide = isWide(i);
-                    const vtype = wide ? visualTypes[Math.floor(i / 2) % visualTypes.length] : null;
-                    return (
-                      <article
-                        key={item.number}
-                        className={`ffc glass-liquid${wide ? " ffc--wide" : " ffc--narrow"}`}
-                      >
-                        {vtype && (
-                          <div className={`ffc-visual ffc-visual--${vtype}`} aria-hidden="true">
-                            <VisualArt type={vtype} />
-                          </div>
-                        )}
-
-                        <div className="ffc-ghost" aria-hidden="true">
-                          {String(i + 1).padStart(2, "0")}
+                      <div className="ffc-inner">
+                        <div className="ffc-meta">
+                          <span className="ffc-num">{item.number}</span>
+                          <span className="ffc-dash" aria-hidden="true" />
+                          <span className="ffc-room">Room {String(i + 1).padStart(2, "0")}</span>
                         </div>
 
-                        <div className="ffc-inner">
-                          <div className="ffc-meta">
-                            <span className="ffc-num">{item.number}</span>
-                            <span className="ffc-dash" aria-hidden="true" />
-                            <span className="ffc-room">Room {String(i + 1).padStart(2, "0")}</span>
-                          </div>
-
-                          <div className="ffc-titles">
-                            <h4 className="ffc-title">{item.title}</h4>
-                            <h4 className="ffc-title ffc-italic">{item.titleItalic}</h4>
-                          </div>
-
-                          <p className="ffc-desc">{item.description}</p>
-
-                          <div className="ffc-tags">
-                            {item.tags.map((tag) => (
-                              <span key={tag} className="ffc-tag">{tag}</span>
-                            ))}
-                          </div>
-
-                          <div className="ffc-foot">
-                            <span className="ffc-foot-line" aria-hidden="true" />
-                            <span className="ffc-foot-cta">Open room ↗</span>
-                          </div>
+                        <div className="ffc-titles">
+                          <h4 className="ffc-title">{item.title}</h4>
+                          <h4 className="ffc-title ffc-italic">{item.titleItalic}</h4>
                         </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </div>
 
-              {/* rail */}
-              <div className="ffd-rail">
-                <span className="ffd-counter">
-                  <span ref={counterRef}>01</span>
-                  <span className="ffd-slash">/</span>
-                  <span className="ffd-total">{String(items.length).padStart(2, "0")}</span>
-                </span>
-                <div className="ffd-bar">
-                  <div ref={fillRef} className="ffd-bar-fill" />
-                </div>
-                <span className="ffd-hint">Scroll · Linger</span>
-              </div>
+                        <p className="ffc-desc">{item.description}</p>
 
+                        <div className="ffc-tags">
+                          {item.tags.map((tag) => (
+                            <span key={tag} className="ffc-tag">{tag}</span>
+                          ))}
+                        </div>
+
+                        <div className="ffc-foot">
+                          <span className="ffc-foot-line" aria-hidden="true" />
+                          <span className="ffc-foot-cta">Open room ↗</span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
             </div>
+
+            <div className="ffd-rail">
+              <span className="ffd-counter">
+                <span ref={counterRef}>01</span>
+                <span className="ffd-slash">/</span>
+                <span className="ffd-total">{String(items.length).padStart(2, "0")}</span>
+              </span>
+              <div className="ffd-bar">
+                <div ref={fillRef} className="ffd-bar-fill" />
+              </div>
+              <span className="ffd-hint">Scroll · Linger</span>
+            </div>
+
           </div>
         </div>
       </div>
@@ -299,7 +235,7 @@ export default function FocusFlow({ items, sectionHeightVH = 500 }: FocusFlowPro
   );
 }
 
-/* ── Pure-CSS visual arts (unchanged) ── */
+/* Pure-CSS visual arts (unchanged) */
 function VisualArt({ type }: { type: string }) {
   if (type === "target") return (
     <div className="va va-target">

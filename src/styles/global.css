@@ -725,7 +725,38 @@ p.lead {
   transform-origin: top left;
   will-change: transform, opacity;
 }
-.focus-flow-intro .eyebrow { margin-bottom: 24px; }
+.focus-flow-intro .eyebrow {
+  margin-bottom: 0;
+  font-size: clamp(30px, 4.6vw, 64px);
+  letter-spacing: 0.2em;
+  gap: 28px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.focus-flow-intro .eyebrow::before {
+  width: clamp(60px, 8vw, 140px);
+  height: 2px;
+  opacity: 0.55;
+  background: var(--leak-deep);
+  flex-shrink: 0;
+}
+
+/* morphing eyebrow stack — UP NEXT ↔ 02 — FOCUS */
+.ffe-stack {
+  display: inline-grid;
+  grid-template-areas: "x";
+  line-height: 1;
+}
+
+.ffe-stack > .ffe-text {
+  grid-area: x;
+  display: block;
+  will-change: opacity;
+}
+
+.ffe-a { opacity: 1; }
+.ffe-b { opacity: 0; }
 .focus-flow-title {
   font-family: "Instrument Serif", serif;
   font-weight: 400;
@@ -746,108 +777,22 @@ p.lead {
   margin: 32px 0 0;
 }
 
-/* ── INTRO TOC (table of contents) ── */
-.focus-flow-divider {
-  width: 64px;
-  height: 1px;
-  background: var(--leak-deep);
-  margin: 32px 0 20px;
-  opacity: 0.55;
-}
-
-.focus-flow-toc {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-width: 22ch;
-}
-
-.ftoc-row {
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  align-items: baseline;
-  gap: 14px;
-  font-family: "Instrument Serif", serif;
-  font-size: clamp(17px, 1.4vw, 20px);
-  line-height: 1.45;
-  color: var(--ink);
-  position: relative;
-  padding: 2px 0;
-}
-
-.ftoc-row::before {
-  content: "";
-  position: absolute;
-  left: 28px;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: linear-gradient(to right, rgba(20, 10, 5, 0.08) 0%, transparent 80%);
-}
-
-.ftoc-row:last-child::before { display: none; }
-
-.ftoc-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  color: var(--ink-mute);
-  text-transform: uppercase;
-  font-weight: 500;
-  padding-top: 4px;
-}
-
-.ftoc-text em {
-  font-style: italic;
-  color: var(--leak-deep);
-}
-
-.focus-flow-aside {
-  margin: 18px 0 0;
-  font-family: "Instrument Serif", serif;
-  font-size: 14px;
-  color: var(--ink-mute);
-  line-height: 1.45;
-  max-width: 28ch;
-}
-
-.focus-flow-aside .ffa-plus {
-  color: var(--leak-deep);
-  font-weight: 600;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  margin-right: 4px;
-}
-
-.focus-flow-aside em {
-  font-style: italic;
-  color: var(--ink-soft);
-}
-
 /* ── HEAD — own absolute reveal ── */
 .focus-flow-head-abs {
   position: absolute;
-  top: 38px;
+  top: 78px;
   left: 280px;
-  right: 44px;
+  right: 48px;
   z-index: 4;
   opacity: 0;
   pointer-events: none;
   will-change: opacity;
 }
 
-.focus-flow-head-eyebrow {
-  will-change: transform;
-  margin-bottom: 14px;
-}
-
 .focus-flow-head-title {
   font-family: "Instrument Serif", serif;
   font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 50px);
+  font-size: clamp(32px, 4vw, 58px);
   line-height: 0.98;
   letter-spacing: -0.024em;
   margin: 0;
@@ -882,154 +827,12 @@ p.lead {
 .focus-flow-detail {
   width: 100%;
   height: 100%;
-  padding: 0 0 0 168px; /* leave room for anchored intro */
-  display: flex;
-  overflow: hidden;
-}
-
-/* ── LEFT SIDEBAR ── */
-.ffd-sidebar {
-  flex: 0 0 80px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 0 28px;
-  border-right: 1px solid rgba(20, 10, 5, 0.1);
-  gap: 0;
-}
-
-.ffd-sidebar-badge {
-  width: 64px;
-  height: 64px;
-  border-radius: 50% !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1px;
-  flex-shrink: 0;
-}
-
-.ffd-badge-label {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  color: var(--ink);
-}
-
-.ffd-badge-sub {
-  font-family: "Instrument Serif", serif;
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--leak-deep);
-  line-height: 1;
-}
-
-/* vertical progress line + moving marker */
-.ffd-progress-wrap {
-  position: relative;
-  flex: 1;
-  width: 1px;
-  margin: 28px 0 24px;
-  min-height: 120px;
-}
-
-.ffd-progress-line {
-  position: absolute;
-  inset: 0;
-  width: 1px;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(20, 10, 5, 0.18) 6%,
-    rgba(20, 10, 5, 0.18) 94%,
-    transparent 100%
-  );
-}
-
-.ffd-progress-stops {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px 0;
-}
-
-.ffd-stop {
-  width: 5px;
-  height: 1px;
-  background: rgba(20, 10, 5, 0.22);
-  display: block;
-}
-
-.ffd-progress-marker {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  white-space: nowrap;
-  will-change: top;
-  z-index: 3;
-  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ffd-marker-dot {
-  display: block;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--leak-deep);
-  box-shadow:
-    0 0 0 3px rgba(255, 252, 246, 0.85),
-    0 0 0 4px rgba(214, 90, 58, 0.32),
-    0 0 14px rgba(214, 90, 58, 0.55);
-  flex-shrink: 0;
-  position: relative;
-}
-
-.ffd-marker-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--leak-deep);
-  background: rgba(255, 252, 246, 0.7);
-  padding: 2px 6px;
-  border-radius: 4px;
-  backdrop-filter: blur(6px);
-}
-
-.ffd-sidebar-foot {
-  margin-top: 8px;
-}
-
-.ffd-sidebar-index {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 8.5px;
-  letter-spacing: 0.32em;
-  color: var(--ink-mute);
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-}
-
-/* ── RIGHT CONTENT ── */
-.ffd-right {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
+  /* leave room for anchored intro on the left, head sits above */
+  padding: 200px 40px 28px 280px;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
-  /* top padding leaves room for the absolutely positioned head */
-  padding: 200px 40px 28px 32px;
   gap: 18px;
+  overflow: hidden;
 }
 
 /* ── BENTO STRIP ── */
@@ -1390,26 +1193,25 @@ p.lead {
   .focus-flow { height: 420vh !important; }
 
   .focus-flow-intro { width: min(280px, calc(100vw - 44px)); }
-  .focus-flow-intro .eyebrow { margin-bottom: 18px; }
-  .focus-flow-caption { margin-top: 20px; font-size: 17px; }
-  .focus-flow-toc { display: none; }
-  .focus-flow-aside { display: none; }
-  .focus-flow-divider { margin: 22px 0 0; }
+  .focus-flow-intro .eyebrow {
+    margin-bottom: 0;
+    font-size: clamp(22px, 8vw, 38px);
+    letter-spacing: 0.18em;
+    gap: 18px;
+  }
+  .focus-flow-intro .eyebrow::before {
+    width: clamp(40px, 12vw, 80px);
+  }
 
   .focus-flow-head-abs {
-    top: auto;
-    bottom: auto;
     left: 16px;
     right: 16px;
-    top: 24px;
+    top: 70px;
   }
-  .focus-flow-head-title { font-size: clamp(22px, 7vw, 34px); max-width: none; }
+  .focus-flow-head-title { font-size: clamp(24px, 7.5vw, 36px); max-width: none; }
 
-  .focus-flow-detail { padding-left: 0; }
-  .ffd-sidebar { display: none; }
-
-  .ffd-right {
-    padding: 130px 16px 18px;
+  .focus-flow-detail {
+    padding: 150px 16px 18px;
     gap: 12px;
   }
 
@@ -1426,11 +1228,9 @@ p.lead {
 }
 
 @media (min-width: 721px) and (max-width: 1100px) {
-  .focus-flow-detail { padding-left: 120px; }
-  .ffd-right { padding: 160px 24px 22px 24px; }
-  .ffd-sidebar { flex: 0 0 68px; }
-  .focus-flow-head-abs { left: 220px; right: 28px; top: 30px; }
-  .focus-flow-head-title { font-size: clamp(22px, 3.2vw, 36px); }
+  .focus-flow-detail { padding: 180px 24px 22px 200px; }
+  .focus-flow-head-abs { left: 200px; right: 28px; top: 70px; }
+  .focus-flow-head-title { font-size: clamp(26px, 3.6vw, 40px); }
   .ffc--wide  { flex-basis: min(44vw, 380px); }
   .ffc--narrow { flex-basis: min(26vw, 240px); }
 }

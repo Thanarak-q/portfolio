@@ -32,6 +32,15 @@ export function initScroll() {
 
   gsap.ticker.lagSmoothing(0);
 
+  // Force a refresh once layout has fully settled. Without this, triggers
+  // created during hydration (especially with tall sticky sections like
+  // FocusFlow) measure positions before the final document height is known,
+  // and reveal animations below those sections can stay stuck at opacity 0.
+  const forceRefresh = () => ScrollTrigger.refresh();
+  requestAnimationFrame(() => requestAnimationFrame(forceRefresh));
+  window.addEventListener("load", forceRefresh, { once: true });
+  setTimeout(forceRefresh, 600);
+
   return lenis;
 }
 

@@ -174,19 +174,13 @@ export const workItems: WorkItem[] = [
 export const contactLines = ["Let's talk about", "<em>what could break.</em>"];
 
 export const contactLinks: ContactLink[] = [
-  { href: "mailto:hello@thanarak.dev", label: "hello@thanarak.dev" },
   {
-    href: "https://github.com/thanarak",
-    label: "github / thanarak",
-    external: true,
+    href: "mailto:thanarak.work@gmail.com",
+    label: "thanarak.work@gmail.com",
   },
   {
-    href: "https://www.linkedin.com/in/thanarak",
-    label: "linkedin / thanarak",
+    href: "https://github.com/Thanarak-q",
+    label: "github / Thanarak-q",
     external: true,
-  },
-  {
-    href: "mailto:hello@thanarak.dev?subject=Signal%20request",
-    label: "signal / on request",
   },
 ];
