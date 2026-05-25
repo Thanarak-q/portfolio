@@ -746,6 +746,128 @@ p.lead {
   margin: 32px 0 0;
 }
 
+/* ── INTRO TOC (table of contents) ── */
+.focus-flow-divider {
+  width: 64px;
+  height: 1px;
+  background: var(--leak-deep);
+  margin: 32px 0 20px;
+  opacity: 0.55;
+}
+
+.focus-flow-toc {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 22ch;
+}
+
+.ftoc-row {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: baseline;
+  gap: 14px;
+  font-family: "Instrument Serif", serif;
+  font-size: clamp(17px, 1.4vw, 20px);
+  line-height: 1.45;
+  color: var(--ink);
+  position: relative;
+  padding: 2px 0;
+}
+
+.ftoc-row::before {
+  content: "";
+  position: absolute;
+  left: 28px;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(to right, rgba(20, 10, 5, 0.08) 0%, transparent 80%);
+}
+
+.ftoc-row:last-child::before { display: none; }
+
+.ftoc-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  font-weight: 500;
+  padding-top: 4px;
+}
+
+.ftoc-text em {
+  font-style: italic;
+  color: var(--leak-deep);
+}
+
+.focus-flow-aside {
+  margin: 18px 0 0;
+  font-family: "Instrument Serif", serif;
+  font-size: 14px;
+  color: var(--ink-mute);
+  line-height: 1.45;
+  max-width: 28ch;
+}
+
+.focus-flow-aside .ffa-plus {
+  color: var(--leak-deep);
+  font-weight: 600;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  margin-right: 4px;
+}
+
+.focus-flow-aside em {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ── HEAD — own absolute reveal ── */
+.focus-flow-head-abs {
+  position: absolute;
+  top: 38px;
+  left: 280px;
+  right: 44px;
+  z-index: 4;
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.focus-flow-head-eyebrow {
+  will-change: transform;
+  margin-bottom: 14px;
+}
+
+.focus-flow-head-title {
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 50px);
+  line-height: 0.98;
+  letter-spacing: -0.024em;
+  margin: 0;
+  max-width: 22ch;
+  display: block;
+}
+
+.ffh-line {
+  display: inline;
+  will-change: clip-path;
+  /* initial state */
+  -webkit-clip-path: inset(0 100% 0 0);
+  clip-path: inset(0 100% 0 0);
+}
+
+.ffh-line-italic {
+  color: var(--leak-deep);
+  font-style: italic;
+}
+
 /* detail shell */
 .focus-flow-detail-shell {
   position: absolute;
@@ -805,31 +927,87 @@ p.lead {
   line-height: 1;
 }
 
-.ffd-sidebar-nav {
+/* vertical progress line + moving marker */
+.ffd-progress-wrap {
+  position: relative;
+  flex: 1;
+  width: 1px;
+  margin: 28px 0 24px;
+  min-height: 120px;
+}
+
+.ffd-progress-line {
+  position: absolute;
+  inset: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(20, 10, 5, 0.18) 6%,
+    rgba(20, 10, 5, 0.18) 94%,
+    transparent 100%
+  );
+}
+
+.ffd-progress-stops {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  margin-top: 28px;
-  flex: 1;
+  padding: 2px 0;
 }
 
-.ffd-dot {
+.ffd-stop {
+  width: 5px;
+  height: 1px;
+  background: rgba(20, 10, 5, 0.22);
   display: block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(20, 10, 5, 0.18);
-  transition: background 0.35s, transform 0.35s;
 }
 
-.ffd-dot--on {
+.ffd-progress-marker {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  will-change: top;
+  z-index: 3;
+  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ffd-marker-dot {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
   background: var(--leak-deep);
-  transform: scale(1.3);
+  box-shadow:
+    0 0 0 3px rgba(255, 252, 246, 0.85),
+    0 0 0 4px rgba(214, 90, 58, 0.32),
+    0 0 14px rgba(214, 90, 58, 0.55);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.ffd-marker-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--leak-deep);
+  background: rgba(255, 252, 246, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+  backdrop-filter: blur(6px);
 }
 
 .ffd-sidebar-foot {
-  margin-top: 28px;
+  margin-top: 8px;
 }
 
 .ffd-sidebar-index {
@@ -848,32 +1026,10 @@ p.lead {
   min-width: 0;
   height: 100%;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  padding: 36px 40px 28px 32px;
-  gap: 20px;
-}
-
-.ffd-head {
-  display: flex;
-  align-items: baseline;
-  gap: 32px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid rgba(20, 10, 5, 0.1);
-}
-
-.ffd-title {
-  font-family: "Instrument Serif", serif;
-  font-weight: 400;
-  font-size: clamp(24px, 3vw, 44px);
-  line-height: 0.97;
-  letter-spacing: -0.022em;
-  margin: 0;
-  max-width: 14ch;
-}
-
-.ffd-title span {
-  color: var(--leak-deep);
-  font-style: italic;
+  grid-template-rows: minmax(0, 1fr) auto;
+  /* top padding leaves room for the absolutely positioned head */
+  padding: 200px 40px 28px 32px;
+  gap: 18px;
 }
 
 /* ── BENTO STRIP ── */
@@ -1236,18 +1392,26 @@ p.lead {
   .focus-flow-intro { width: min(280px, calc(100vw - 44px)); }
   .focus-flow-intro .eyebrow { margin-bottom: 18px; }
   .focus-flow-caption { margin-top: 20px; font-size: 17px; }
+  .focus-flow-toc { display: none; }
+  .focus-flow-aside { display: none; }
+  .focus-flow-divider { margin: 22px 0 0; }
+
+  .focus-flow-head-abs {
+    top: auto;
+    bottom: auto;
+    left: 16px;
+    right: 16px;
+    top: 24px;
+  }
+  .focus-flow-head-title { font-size: clamp(22px, 7vw, 34px); max-width: none; }
 
   .focus-flow-detail { padding-left: 0; }
-
   .ffd-sidebar { display: none; }
 
   .ffd-right {
-    padding: 80px 16px 18px;
-    gap: 14px;
+    padding: 130px 16px 18px;
+    gap: 12px;
   }
-
-  .ffd-head { flex-direction: column; gap: 8px; }
-  .ffd-title { font-size: clamp(24px, 8vw, 36px); }
 
   .ffd-viewport { overflow-x: auto; padding: 6px 2px 8px; }
   .ffd-track { gap: 12px; padding-right: 16px; }
@@ -1263,8 +1427,10 @@ p.lead {
 
 @media (min-width: 721px) and (max-width: 1100px) {
   .focus-flow-detail { padding-left: 120px; }
-  .ffd-right { padding: 28px 24px 22px 24px; }
+  .ffd-right { padding: 160px 24px 22px 24px; }
   .ffd-sidebar { flex: 0 0 68px; }
+  .focus-flow-head-abs { left: 220px; right: 28px; top: 30px; }
+  .focus-flow-head-title { font-size: clamp(22px, 3.2vw, 36px); }
   .ffc--wide  { flex-basis: min(44vw, 380px); }
   .ffc--narrow { flex-basis: min(26vw, 240px); }
 }
