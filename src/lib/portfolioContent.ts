@@ -91,6 +91,38 @@ export const focusItems: FocusItem[] = [
       "Public writeups, open-source harnesses, a small Substack on jailbreak taxonomy. The part of the work that doesn't sit in a vault.",
     tags: ["Writeups", "OSS", "Talks", "Workshops"],
   },
+  {
+    number: "02 / 05",
+    title: "Threat",
+    titleItalic: "Intel",
+    description:
+      "Tracking actor TTPs, mapping infrastructure, and turning raw telemetry into something a defender can actually act on at 3 a.m.",
+    tags: ["TTPs", "STIX", "OSINT", "Pivoting", "YARA"],
+  },
+  {
+    number: "02 / 06",
+    title: "Custom",
+    titleItalic: "Tooling",
+    description:
+      "Implants, loaders, eval harnesses, and tiny CLIs that I rewrite every other year. Built so the next engagement starts at the deep end.",
+    tags: ["Rust", "Go", "Implants", "C2 Profiles", "Tradecraft"],
+  },
+  {
+    number: "02 / 07",
+    title: "Purple",
+    titleItalic: "Bridge",
+    description:
+      "The handoff between offense and detection — replayable scenarios, ATT&CK coverage maps, and the boring meetings that ship signal.",
+    tags: ["Detection", "Replay", "Coverage", "SIEM", "Sigma"],
+  },
+  {
+    number: "02 / 08",
+    title: "Cinema",
+    titleItalic: "Off-hours",
+    description:
+      "16mm, slow shutter, lake at dawn. The hour I let go of the keyboard so the next exploit has somewhere to land.",
+    tags: ["Film", "Process", "Slow", "Quiet", "Frame"],
+  },
 ];
 
 export const marqueeItems = Array.from({ length: 4 }, () => marqueeBaseItems).flat();

@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import ScrollInit from "../components/ScrollInit";
 import HeroClip from "../components/HeroClip";
 import SlideUpClip from "../components/SlideUpClip";
-import HorizontalPanel from "../components/HorizontalPanel";
+import FocusFlow from "../components/FocusFlow";
 import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
 import {
   aboutLines,
@@ -103,44 +103,7 @@ import {
     exitDirection="left"
   />
 
-  <!-- UP-NEXT bridge -->
-  <section class="up-next">
-    <div class="up-next-inner">
-      <div class="eyebrow">Up next</div>
-      <h2 class="up-next-title">
-        Focus —<br />
-        <em>three rooms, and a fourth.</em>
-      </h2>
-      <p class="up-next-caption">
-        Red Team. AI Security. Cloud &amp; App. Field Notes.
-      </p>
-    </div>
-  </section>
-
-  <!-- FOCUS — horizontal panel -->
-  <div id="focus">
-    <HorizontalPanel
-      client:load
-      sectionHeightVH={420}
-      eyebrow="02 — Focus"
-      title="Three rooms <span class='it'>I keep returning to,</span> and a fourth I share aloud."
-    >
-      {focusItems.map((item) => (
-        <div class="glass-liquid focus-card h-card">
-          <div class="num">{item.number}</div>
-          <h3>
-            {item.title}<br /><span class="it">{item.titleItalic}</span>
-          </h3>
-          <p>{item.description}</p>
-          <div class="tags">
-            {item.tags.map((tag) => (
-              <span class="tag">{tag}</span>
-            ))}
-          </div>
-        </div>
-      ))}
-    </HorizontalPanel>
-  </div>
+  <FocusFlow client:load items={focusItems} sectionHeightVH={520} />
 
   <!-- INTERLUDE 2 -->
   <SlideUpClip
