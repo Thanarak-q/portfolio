@@ -12,49 +12,55 @@ interface FocusFlowProps {
 }
 
 const clamp01 = (v: number) => Math.max(0, Math.min(1, v));
-const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+const easeOut3 = (t: number) => 1 - Math.pow(1 - t, 3);
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
 
-export default function FocusFlow({
-  items,
-  sectionHeightVH = 520,
-}: FocusFlowProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const introRef = useRef<HTMLDivElement>(null);
-  const detailRef = useRef<HTMLDivElement>(null);
-  const veilRef = useRef<HTMLDivElement>(null);
-  const stripViewportRef = useRef<HTMLDivElement>(null);
-  const stripTrackRef = useRef<HTMLDivElement>(null);
-  const fillRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLSpanElement>(null);
+// Visual art type per card slot (wide cards only, evens)
+const visualTypes = ["target", "stack", "scope", "lens"];
+
+// Wide on even indices, narrow on odd
+const isWide = (i: number) => i % 2 === 0;
+
+export default function FocusFlow({ items, sectionHeightVH = 520 }: FocusFlowProps) {
+  const sectionRef   = useRef<HTMLElement>(null);
+  const introRef     = useRef<HTMLDivElement>(null);
+  const detailRef    = useRef<HTMLDivElement>(null);
+  const veilRef      = useRef<HTMLDivElement>(null);
+  const viewportRef  = useRef<HTMLDivElement>(null);
+  const trackRef     = useRef<HTMLDivElement>(null);
+  const fillRef      = useRef<HTMLDivElement>(null);
+  const counterRef   = useRef<HTMLSpanElement>(null);
+  const navDotsRef   = useRef<HTMLDivElement>(null);
 
   useIsomorphicLayoutEffect(() => {
-    const section = sectionRef.current;
-    const intro = introRef.current;
-    const detail = detailRef.current;
-    const veil = veilRef.current;
-    const stripViewport = stripViewportRef.current;
-    const stripTrack = stripTrackRef.current;
-    const fill = fillRef.current;
-    const counter = counterRef.current;
+    const section  = sectionRef.current;
+    const intro    = introRef.current;
+    const detail   = detailRef.current;
+    const veil     = veilRef.current;
+    const viewport = viewportRef.current;
+    const track    = trackRef.current;
+    const fill     = fillRef.current;
+    const counter  = counterRef.current;
+    const navDots  = navDotsRef.current;
 
-    if (!section || !intro || !detail || !veil || !stripViewport || !stripTrack || !fill || !counter) return;
+    if (!section || !intro || !detail || !veil || !viewport || !track || !fill || !counter) return;
 
     const measure = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const mobile = vw <= 720;
+      const mob = vw <= 720;
       return {
-        centeredX: vw * (mobile ? 0.06 : 0.26),
-        centeredY: vh * (mobile ? 0.22 : 0.26),
-        anchoredX: mobile ? 16 : 18,
-        anchoredY: mobile ? 86 : 92,
-        endScale: mobile ? 0.34 : 0.31,
-        trackTravel: Math.max(0, stripTrack.scrollWidth - stripViewport.clientWidth),
+        cx: vw * (mob ? 0.06 : 0.26),
+        cy: vh * (mob ? 0.22 : 0.26),
+        ax: mob ? 16 : 18,
+        ay: mob ? 86 : 92,
+        es: mob ? 0.34 : 0.31,
+        travel: Math.max(0, track.scrollWidth - viewport.clientWidth),
       };
     };
 
     let m = measure();
+    const dots = navDots ? Array.from(navDots.querySelectorAll<HTMLElement>(".ffd-dot")) : [];
 
     const trigger = ScrollTrigger.create({
       trigger: section,
@@ -62,24 +68,30 @@ export default function FocusFlow({
       end: "bottom bottom",
       scrub: true,
       onUpdate(self) {
-        // intro shrink-anchor
-        const ip = easeOutCubic(clamp01((self.progress - 0.06) / 0.34));
-        intro.style.transform = `translate3d(${mix(m.centeredX, m.anchoredX, ip)}px,${mix(m.centeredY, m.anchoredY, ip)}px,0) scale(${mix(1, m.endScale, ip)})`;
+        // intro anchor
+        const ip = easeOut3(clamp01((self.progress - 0.06) / 0.34));
+        intro.style.transform = `translate3d(${mix(m.cx, m.ax, ip)}px,${mix(m.cy, m.ay, ip)}px,0) scale(${mix(1, m.es, ip)})`;
         intro.style.opacity = String(mix(1, 0.86, ip));
 
         // detail slide-in
-        const dp = easeOutCubic(clamp01((self.progress - 0.26) / 0.26));
+        const dp = easeOut3(clamp01((self.progress - 0.26) / 0.26));
         detail.style.transform = `translate3d(${mix(100, 0, dp)}%,0,0) scale(${mix(0.985, 1, dp)})`;
-        detail.style.opacity = String(clamp01((self.progress - 0.22) / 0.18));
-        detail.style.filter = `blur(${mix(18, 0, dp)}px)`;
+        detail.style.opacity   = String(clamp01((self.progress - 0.22) / 0.18));
+        detail.style.filter    = `blur(${mix(18, 0, dp)}px)`;
 
-        // horizontal strip pan
-        const sp = easeOutCubic(clamp01((self.progress - 0.46) / 0.34));
-        stripTrack.style.transform = `translate3d(${-m.trackTravel * sp}px,0,0)`;
+        // horizontal pan
+        const sp = easeOut3(clamp01((self.progress - 0.46) / 0.34));
+        track.style.transform = `translate3d(${-m.travel * sp}px,0,0)`;
 
-        // progress bar + counter
+        // progress + counter
         fill.style.transform = `scaleX(${sp})`;
-        counter.textContent = String(Math.min(items.length, Math.floor(sp * items.length) + 1)).padStart(2, "0");
+        const active = Math.min(items.length, Math.floor(sp * items.length) + 1);
+        counter.textContent = String(active).padStart(2, "0");
+
+        // light up sidebar dots
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("ffd-dot--on", i < active);
+        });
 
         veil.style.opacity = String(mix(0, 1, clamp01((self.progress - 0.18) / 0.26)));
       },
@@ -101,13 +113,12 @@ export default function FocusFlow({
       <div className="focus-flow-sticky">
         <div ref={veilRef} className="focus-flow-veil" aria-hidden="true" />
 
-        {/* anchored intro */}
+        {/* anchored intro block */}
         <div ref={introRef} className="focus-flow-intro">
           <div className="eyebrow">Up next</div>
           <h2 className="focus-flow-title">
             Focus —<br />
-            <em>three rooms,</em>
-            <br />
+            <em>three rooms,</em><br />
             <em>and a fourth.</em>
           </h2>
           <p className="focus-flow-caption">
@@ -115,80 +126,160 @@ export default function FocusFlow({
           </p>
         </div>
 
-        {/* detail panel */}
+        {/* full detail panel */}
         <div ref={detailRef} className="focus-flow-detail-shell">
           <div className="focus-flow-detail">
 
-            {/* header */}
-            <div className="focus-flow-detail-head">
-              <div className="eyebrow">02 — Focus</div>
-              <h3 className="focus-flow-detail-title">
-                Three rooms I keep returning to,
-                <span> and a fourth I share aloud.</span>
-              </h3>
-            </div>
+            {/* ── LEFT SIDEBAR ── */}
+            <aside className="ffd-sidebar">
+              <div className="ffd-sidebar-badge glass-liquid" aria-hidden="true">
+                <span className="ffd-badge-label">FOCUS</span>
+                <span className="ffd-badge-sub">02</span>
+              </div>
 
-            {/* card strip */}
-            <div ref={stripViewportRef} className="focus-flow-strip-viewport">
-              <div ref={stripTrackRef} className="focus-flow-strip-track">
-                {items.map((item, i) => (
-                  <article key={item.number} className="focus-flow-card glass-liquid">
-                    {/* large ghost index */}
-                    <div className="ffc-ghost" aria-hidden="true">
-                      {String(i + 1).padStart(2, "0")}
-                    </div>
-
-                    {/* top meta */}
-                    <div className="ffc-meta">
-                      <span className="ffc-num">{item.number}</span>
-                      <span className="ffc-sep" aria-hidden="true" />
-                      <span className="ffc-room">Room {String(i + 1).padStart(2, "0")}</span>
-                    </div>
-
-                    {/* title block */}
-                    <div className="ffc-title-block">
-                      <h4 className="ffc-title">{item.title}</h4>
-                      <h4 className="ffc-title ffc-title-italic">{item.titleItalic}</h4>
-                    </div>
-
-                    {/* body */}
-                    <p className="ffc-desc">{item.description}</p>
-
-                    {/* tags */}
-                    <div className="ffc-tags">
-                      {item.tags.map((tag) => (
-                        <span key={tag} className="ffc-tag">{tag}</span>
-                      ))}
-                    </div>
-
-                    {/* foot */}
-                    <div className="ffc-foot">
-                      <span className="ffc-foot-rule" aria-hidden="true" />
-                      <a className="ffc-foot-cta" href="#focus" tabIndex={-1}>
-                        Open room <span aria-hidden="true">↗</span>
-                      </a>
-                    </div>
-                  </article>
+              <div ref={navDotsRef} className="ffd-sidebar-nav" aria-hidden="true">
+                {items.map((_, i) => (
+                  <span key={i} className="ffd-dot" title={`Room ${i + 1}`} />
                 ))}
               </div>
-            </div>
 
-            {/* progress row */}
-            <div className="focus-flow-rail">
-              <span className="focus-flow-counter">
-                <span ref={counterRef}>01</span>
-                <span className="ffc-sep-slash">/</span>
-                <span className="focus-flow-counter-total">{String(items.length).padStart(2, "0")}</span>
-              </span>
-              <div className="focus-flow-track">
-                <div ref={fillRef} className="focus-flow-fill" />
+              <div className="ffd-sidebar-foot">
+                <span className="ffd-sidebar-index">ROOMS</span>
               </div>
-              <span className="focus-flow-hint">Scroll · Linger</span>
-            </div>
+            </aside>
 
+            {/* ── RIGHT CONTENT ── */}
+            <div className="ffd-right">
+
+              {/* header */}
+              <div className="ffd-head">
+                <div className="eyebrow">02 — Focus</div>
+                <h3 className="ffd-title">
+                  Three rooms I keep returning to,
+                  <span> and a fourth I share aloud.</span>
+                </h3>
+              </div>
+
+              {/* bento card strip */}
+              <div ref={viewportRef} className="ffd-viewport">
+                <div ref={trackRef} className="ffd-track">
+                  {items.map((item, i) => {
+                    const wide = isWide(i);
+                    const vtype = wide ? visualTypes[Math.floor(i / 2) % visualTypes.length] : null;
+                    return (
+                      <article
+                        key={item.number}
+                        className={`ffc glass-liquid${wide ? " ffc--wide" : " ffc--narrow"}`}
+                      >
+                        {/* visual art zone — wide cards only */}
+                        {vtype && (
+                          <div className={`ffc-visual ffc-visual--${vtype}`} aria-hidden="true">
+                            <VisualArt type={vtype} />
+                          </div>
+                        )}
+
+                        {/* ghost number */}
+                        <div className="ffc-ghost" aria-hidden="true">
+                          {String(i + 1).padStart(2, "0")}
+                        </div>
+
+                        <div className="ffc-inner">
+                          {/* meta */}
+                          <div className="ffc-meta">
+                            <span className="ffc-num">{item.number}</span>
+                            <span className="ffc-dash" aria-hidden="true" />
+                            <span className="ffc-room">Room {String(i + 1).padStart(2, "0")}</span>
+                          </div>
+
+                          {/* title */}
+                          <div className="ffc-titles">
+                            <h4 className="ffc-title">{item.title}</h4>
+                            <h4 className="ffc-title ffc-italic">{item.titleItalic}</h4>
+                          </div>
+
+                          {/* desc */}
+                          <p className="ffc-desc">{item.description}</p>
+
+                          {/* tags */}
+                          <div className="ffc-tags">
+                            {item.tags.map((tag) => (
+                              <span key={tag} className="ffc-tag">{tag}</span>
+                            ))}
+                          </div>
+
+                          {/* foot */}
+                          <div className="ffc-foot">
+                            <span className="ffc-foot-line" aria-hidden="true" />
+                            <span className="ffc-foot-cta">Open room ↗</span>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* progress rail */}
+              <div className="ffd-rail">
+                <span className="ffd-counter">
+                  <span ref={counterRef}>01</span>
+                  <span className="ffd-slash">/</span>
+                  <span className="ffd-total">{String(items.length).padStart(2, "0")}</span>
+                </span>
+                <div className="ffd-bar">
+                  <div ref={fillRef} className="ffd-bar-fill" />
+                </div>
+                <span className="ffd-hint">Scroll · Linger</span>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
+}
+
+/* ── Pure-CSS visual art components ── */
+function VisualArt({ type }: { type: string }) {
+  if (type === "target") return (
+    <div className="va va-target">
+      <div className="va-ring va-ring--lg" />
+      <div className="va-ring va-ring--md" />
+      <div className="va-ring va-ring--sm" />
+      <div className="va-dot" />
+      <div className="va-cross va-cross--h" />
+      <div className="va-cross va-cross--v" />
+    </div>
+  );
+  if (type === "stack") return (
+    <div className="va va-stack">
+      <div className="va-layer va-layer--3" />
+      <div className="va-layer va-layer--2" />
+      <div className="va-layer va-layer--1" />
+    </div>
+  );
+  if (type === "scope") return (
+    <div className="va va-scope">
+      <div className="va-scope-ring" />
+      <div className="va-scope-h" />
+      <div className="va-scope-v" />
+      <div className="va-scope-dot" />
+      <div className="va-bracket va-bracket--tl" />
+      <div className="va-bracket va-bracket--tr" />
+      <div className="va-bracket va-bracket--bl" />
+      <div className="va-bracket va-bracket--br" />
+    </div>
+  );
+  if (type === "lens") return (
+    <div className="va va-lens">
+      <div className="va-lens-outer" />
+      <div className="va-lens-inner" />
+      {[0, 60, 120, 180, 240, 300].map((deg) => (
+        <div key={deg} className="va-blade" style={{ "--deg": `${deg}deg` } as React.CSSProperties} />
+      ))}
+      <div className="va-lens-dot" />
+    </div>
+  );
+  return null;
 }
