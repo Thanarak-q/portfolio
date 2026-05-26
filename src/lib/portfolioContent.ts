@@ -36,15 +36,6 @@ export interface ContactLink {
   external?: boolean;
 }
 
-const marqueeBaseItems = [
-  "SELECTED WORK",
-  "★",
-  "2024 — 2026",
-  "CONFIDENTIAL",
-  "OPEN-SOURCE",
-  "RESEARCH",
-];
-
 export const navLinks: NavLink[] = [
   { href: "#about", label: "About" },
   { href: "#focus", label: "Focus" },
@@ -52,16 +43,16 @@ export const navLinks: NavLink[] = [
 ];
 
 export const aboutLines = [
-  "I look for the cracks",
-  "<em>in quiet systems.</em>",
-  "Then I write down",
-  "what I learned.",
+  "I break systems",
+  "<em>before they break you.</em>",
+  "Then I turn the findings",
+  "into clearer defenses.",
 ];
 
 export const aboutStats: StatItem[] = [
-  { value: "04", label: "Years adversary simulation" },
-  { value: "37", label: "CVEs & disclosures shipped" },
-  { value: "∞", label: "Cumulus clouds collected" },
+  { value: "04", label: "Years in adversary simulation" },
+  { value: "37", label: "CVEs and disclosures" },
+  { value: "AI", label: "Agent and LLM security focus" },
 ];
 
 export const focusItems: FocusItem[] = [
@@ -83,7 +74,7 @@ export const focusItems: FocusItem[] = [
   },
   {
     name: "Field Notes",
-    type: "Public writeups",
+    type: "Writeups & research notes",
     year: "Ongoing",
     duration: "06 – 10′",
     src: "/assets/bird.png",
@@ -91,7 +82,7 @@ export const focusItems: FocusItem[] = [
   },
   {
     name: "Custom Tooling",
-    type: "Implants & harnesses",
+    type: "Harnesses & internal tools",
     year: "2024",
     duration: "14 – 22′",
     src: "/assets/flowerandbird.png",
@@ -99,15 +90,15 @@ export const focusItems: FocusItem[] = [
   },
   {
     name: "Threat Intel",
-    type: "TTP tracking",
+    type: "TTP mapping",
     year: "2024",
     duration: "09 – 15′",
     src: "/assets/moutainandbird.png",
     alt: "Mountain ridge with bird",
   },
   {
-    name: "Cinema Off-hours",
-    type: "16mm · slow shutter",
+    name: "Visual Archive",
+    type: "Photography & field memory",
     year: "Ongoing",
     duration: "—",
     src: "/assets/moutainandocean.png",
@@ -118,33 +109,31 @@ export const focusItems: FocusItem[] = [
 export const booksRead: BookNote[] = [
   {
     title: "The Art of Memory — Frances Yates",
-    note: "Why method actors and red-teamers both keep palaces.",
+    note: "Memory is infrastructure. I use it to connect signals.",
   },
   {
     title: "Ways of Seeing — John Berger",
-    note: "The frame is half the exploit.",
+    note: "The frame changes what you notice, and what you miss.",
   },
   {
     title: "Thinking in Systems — Donella Meadows",
-    note: "Find the leverage point. Push.",
+    note: "Good security work starts with the system, not the symptom.",
   },
   {
     title: "The Cuckoo's Egg — Clifford Stoll",
-    note: "The original blue-team logbook, still the best.",
+    note: "A reminder that patient notes still beat noisy dashboards.",
   },
   {
     title: "In Praise of Shadows — Jun'ichirō Tanizaki",
-    note: "Dim the room. Watch what surfaces.",
+    note: "Some details only show up when the room gets quieter.",
   },
   {
     title: "The Phoenix Project — Gene Kim",
-    note: "Read it for the empathy, not the playbook.",
+    note: "Security work lands better when it respects how teams ship.",
   },
 ];
 
-export const marqueeItems = Array.from({ length: 4 }, () => marqueeBaseItems).flat();
-
-export const workLines = ["Things I've taken apart,", "<em>on purpose.</em>"];
+export const workLines = ["Selected work from", "<em>offensive security.</em>"];
 
 export const workItems: WorkItem[] = [
   {
@@ -152,14 +141,14 @@ export const workItems: WorkItem[] = [
     title: "Shadow",
     titleItalic: "Operator",
     description:
-      "Multi-stage red-team engagement against a regional fintech: phishing → AD → ESC1 → DA in 11 days.",
+      "Multi-stage red-team engagement for a regional fintech, moving from phishing to AD privilege escalation and domain admin.",
     meta: "2025 · CONFIDENTIAL",
   },
   {
     number: "002",
     title: "Glasshouse",
     description:
-      "LLM agent harness exploit: indirect prompt injection via a vendor PDF, exfiltrating tool calls.",
+      "LLM agent harness research showing how a vendor PDF could trigger indirect prompt injection and expose tool-call data.",
     meta: "2025 · RESEARCH",
   },
   {
@@ -167,7 +156,7 @@ export const workItems: WorkItem[] = [
     title: "Pale",
     titleItalic: "Cumulus",
     description:
-      "Cloud privilege-escalation chain across IAM, SSM, and a misconfigured KMS grant. Five CVEs filed.",
+      "Cloud privilege-escalation chain across IAM, SSM, and a misconfigured KMS grant, with coordinated disclosures filed.",
     meta: "2024 · DISCLOSED",
   },
   {
@@ -175,7 +164,7 @@ export const workItems: WorkItem[] = [
     title: "Quiet",
     titleItalic: "Hours",
     description:
-      "Internal CTF and training program for a 600-person engineering org. Adversary simulation, by belt rank.",
+      "Internal CTF and adversary-simulation training program for a 600-person engineering organization.",
     meta: "2024 · ONGOING",
   },
   {
@@ -183,12 +172,12 @@ export const workItems: WorkItem[] = [
     title: "Field",
     titleItalic: "Notes",
     description:
-      "Public writeups on jailbreak taxonomy and a small Python harness for RAG red-evals.",
+      "Public writeups on jailbreak taxonomy, RAG red-team evaluation, and small Python security tooling.",
     meta: "ONGOING · OPEN-SOURCE",
   },
 ];
 
-export const contactLines = ["Let's talk about", "<em>what could break.</em>"];
+export const contactLines = ["Bring me in before", "<em>the real attack.</em>"];
 
 export const contactLinks: ContactLink[] = [
   {

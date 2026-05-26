@@ -5,7 +5,6 @@ import HeroClip from "../components/HeroClip";
 import SlideUpClip from "../components/SlideUpClip";
 import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
 import ImageReveal from "../components/ImageReveal";
-import DevSectionMarker from "../components/DevSectionMarker.astro";
 import {
   aboutLines,
   aboutStats,
@@ -13,7 +12,6 @@ import {
   contactLines,
   contactLinks,
   focusItems,
-  marqueeItems,
   navLinks,
   workItems,
   workLines,
@@ -22,12 +20,12 @@ import {
 
 <Base>
   <ScrollInit client:load />
-  {import.meta.env.DEV && <DevSectionMarker />}
 
   <nav class="nav glass-liquid" aria-label="Primary">
     <div class="brand">
       <span class="dot" aria-hidden="true"></span>
-      <span>thanarak<span class="role-mini">/ red&nbsp;team</span></span>
+      <span class="brand-name">thanarak</span>
+      <span class="role-mini">/ red&nbsp;team</span>
     </div>
     <div class="nav-links">
       {navLinks.map((link) => (
@@ -48,7 +46,7 @@ import {
     runwayVH={500}
     showHint={true}
     portalEyebrow="CHAPTER 02"
-    portalLabel="who, quietly"
+    portalLabel="portfolio"
   />
   </div>
 
@@ -69,15 +67,14 @@ import {
         <RiseIn client:load distance={60} delay={0.05}>
           <div class="glass-liquid about-card">
             <p class="lead about-lead">
-              By day I find the seams where things weren't meant to give way.
-              In between, I keep the camera rolling on a slower hour.
+              I help teams understand how their systems behave under pressure,
+              from identity paths to LLM agents and the tooling around them.
             </p>
             <p class="body about-body">
-              I'm an offensive security researcher focused on red-team operations and
-              the new attack surface that arrives with large language models —
-              prompt-level exploits, agent chain abuse, model supply chain. I like the
-              part of the job that feels like film: long stretches of patient watching,
-              then one decisive frame.
+              I'm Thanarak Kanyaprasit, an offensive security researcher focused on
+              red-team operations, AI security, cloud escalation, and practical
+              security research. This portfolio collects selected engagements,
+              experiments, tools, and notes that show how I think through attack paths.
             </p>
           </div>
         </RiseIn>
@@ -102,9 +99,9 @@ import {
     client:load
     src="/assets/clip-2-scrub.mp4"
     eyebrow="Interlude — 00:06 / 00:18"
-    title="Some attacks"
-    titleItalic="look like running."
-    caption="Forward momentum, low to the grass. The fastest path between two systems is rarely the obvious one."
+    title="Offense starts"
+    titleItalic="with observation."
+    caption="I map assumptions, access paths, and human workflows before touching the first exploit."
     runwayVH={400}
     exitDirection="left"
   />
@@ -249,23 +246,11 @@ import {
     client:load
     src="/assets/clip-3-scrub.mp4"
     eyebrow="Interlude — 00:12 / 00:18"
-    title="The best ones"
-    titleItalic="look like standing still."
-    caption="Patient watching, listening for the soft click. A camera rolling while nothing seems to happen."
+    title="Good findings"
+    titleItalic="become better systems."
+    caption="The point is not just impact. It is a clear path from evidence to remediation."
     runwayVH={400}
   />
-  </div>
-
-  <!-- MARQUEE -->
-  <div id="marquee" class="marquee" aria-hidden="true">
-    <div class="marquee-track marquee-track-slow">
-      {marqueeItems.map((item) => (
-        <span class="marquee-item">
-          {item}
-          <span class="marquee-sep">✦</span>
-        </span>
-      ))}
-    </div>
   </div>
 
   <!-- WORK -->
@@ -308,8 +293,8 @@ import {
   <section id="contact" class="content contact-bg">
     <video
       class="contact-bg-video"
+      data-contact-video
       src="/assets/ending.mp4"
-      autoplay
       muted
       loop
       playsinline
@@ -325,8 +310,9 @@ import {
 
       <div class="glass-liquid contact-card">
         <p class="body contact-intro">
-          Open to red-team engagements, AI-security research collaborations,
-          and the occasional long walk by a lake.
+          Available for red-team engagements, AI-security research, cloud and
+          identity reviews, and focused collaborations with teams that want
+          practical findings.
         </p>
         <div class="contact-actions">
           {contactLinks.map((link) => (
@@ -343,8 +329,37 @@ import {
       </div>
 
       <footer class="foot">
-        © 2026 Thanarak Kanyaprasit · Shot on memory · Built with care
+        © 2026 Thanarak Kanyaprasit · Offensive security portfolio
       </footer>
     </div>
   </section>
+
+  <script>
+    const contactVideo = document.querySelector<HTMLVideoElement>("[data-contact-video]");
+    const contactSection = document.getElementById("contact");
+
+    if (contactVideo && contactSection) {
+      const playContactVideo = () => {
+        contactVideo.play().catch(() => {});
+      };
+
+      const pauseContactVideo = () => {
+        contactVideo.pause();
+      };
+
+      new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            playContactVideo();
+          } else {
+            pauseContactVideo();
+          }
+        },
+        {
+          rootMargin: "65% 0px 65% 0px",
+          threshold: 0,
+        }
+      ).observe(contactSection);
+    }
+  </script>
 </Base>

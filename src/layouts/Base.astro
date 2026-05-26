@@ -21,10 +21,96 @@ const { title = "Thanarak Kanyaprasit — Portfolio" } = Astro.props;
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="is-loading">
+    <div class="site-loader" data-site-loader aria-hidden="true">
+      <div class="site-loader-inner">
+        <span class="site-loader-kicker">Thanarak</span>
+        <span class="site-loader-count" data-loader-count>001</span>
+        <span class="site-loader-title">loading portfolio</span>
+        <span class="site-loader-rule"><span data-loader-rule></span></span>
+      </div>
+    </div>
     <slot />
     <div class="atmo grain" aria-hidden="true"></div>
     <div class="atmo vignette" aria-hidden="true"></div>
+    <script>
+      import { gsap } from "gsap";
+
+      const loader = document.querySelector<HTMLElement>("[data-site-loader]");
+      const countEl = document.querySelector<HTMLElement>("[data-loader-count]");
+      const ruleEl = document.querySelector<HTMLElement>("[data-loader-rule]");
+      const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+      const waitForWindow = () =>
+        document.readyState === "complete"
+          ? Promise.resolve()
+          : new Promise((resolve) => window.addEventListener("load", resolve, { once: true }));
+      const waitForFonts = () => document.fonts?.ready ?? Promise.resolve();
+      const waitForVideo = (video: HTMLVideoElement) => {
+        if (video.readyState >= 2) return Promise.resolve();
+        return new Promise((resolve) => {
+          const done = () => {
+            video.removeEventListener("canplay", done);
+            video.removeEventListener("loadeddata", done);
+            resolve(undefined);
+          };
+          video.addEventListener("canplay", done, { once: true });
+          video.addEventListener("loadeddata", done, { once: true });
+        });
+      };
+
+      const revealPage = async () => {
+        const progress = { value: 1 };
+        const renderProgress = () => {
+          const n = Math.round(progress.value);
+          if (countEl) countEl.textContent = String(n).padStart(3, "0");
+          if (ruleEl) ruleEl.style.transform = `scaleX(${n / 100})`;
+        };
+
+        renderProgress();
+        gsap.fromTo(
+          ".site-loader-inner",
+          { y: 16, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
+        );
+        const loadingTween = gsap.to(progress, {
+          value: 92,
+          duration: 3.4,
+          ease: "power2.out",
+          onUpdate: renderProgress,
+        });
+
+        const videos = Array.from(document.querySelectorAll<HTMLVideoElement>("video")).slice(0, 3);
+        await Promise.all([
+          wait(1100),
+          Promise.race([
+            Promise.all([waitForWindow(), waitForFonts(), ...videos.map(waitForVideo)]),
+            wait(4200),
+          ]),
+        ]);
+
+        loadingTween.kill();
+        gsap.to(progress, {
+          value: 100,
+          duration: 0.65,
+          ease: "power3.out",
+          onUpdate: renderProgress,
+          onComplete: () => {
+            gsap.to(loader, {
+              opacity: 0,
+              duration: 0.75,
+              ease: "power3.inOut",
+              onStart: () => {
+                document.body.classList.add("is-loaded");
+                document.body.classList.remove("is-loading");
+              },
+              onComplete: () => loader?.remove(),
+            });
+          },
+        });
+      };
+
+      revealPage();
+    </script>
   </body>
 </html>
 
