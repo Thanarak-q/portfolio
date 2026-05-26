@@ -95,8 +95,12 @@ export function SlideIn({
   const ref = useRef<HTMLDivElement>(null);
   const sign = dir === "left" ? -1 : 1;
   useReveal(ref, (el, t) => {
+    const effectiveDistance =
+      window.matchMedia("(max-width: 720px)").matches
+        ? Math.min(distance, 28)
+        : distance;
     const e = easeOutQuint(withDelay(t, delay));
-    el.style.transform = `translate3d(${(1 - e) * sign * distance}px, 0, 0)`;
+    el.style.transform = `translate3d(${(1 - e) * sign * effectiveDistance}px, 0, 0)`;
     el.style.opacity = String(e);
   });
   return (
