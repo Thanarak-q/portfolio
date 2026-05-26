@@ -1,0 +1,99 @@
+---
+const sections = [
+  { id: "hero",      label: "Hero" },
+  { id: "about",     label: "About" },
+  { id: "interlude-1", label: "Interlude 1" },
+  { id: "focus",     label: "Focus" },
+  { id: "interlude-2", label: "Interlude 2" },
+  { id: "marquee",   label: "Marquee" },
+  { id: "work",      label: "Work" },
+  { id: "contact",   label: "Contact" },
+];
+---
+
+<aside class="dev-sec-panel" aria-hidden="true">
+  <div class="dev-sec-title">PAGE MAP</div>
+  <ol class="dev-sec-list">
+    {sections.map((s, i) => (
+      <li data-target={s.id}>
+        <span class="dev-sec-n">{String(i + 1).padStart(2, "0")}</span>
+        <span class="dev-sec-l">{s.label}</span>
+      </li>
+    ))}
+  </ol>
+</aside>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>(".dev-sec-panel li");
+  const targets = Array.from(items)
+    .map((li) => {
+      const id = li.dataset.target!;
+      const el = document.getElementById(id);
+      return el ? { id, el, li } : null;
+    })
+    .filter((x): x is { id: string; el: HTMLElement; li: HTMLElement } => x !== null);
+
+  const setActive = () => {
+    const y = window.scrollY + window.innerHeight * 0.35;
+    let active = targets[0];
+    for (const t of targets) {
+      if (t.el.offsetTop <= y) active = t;
+    }
+    items.forEach((li) => li.classList.remove("is-on"));
+    active?.li.classList.add("is-on");
+  };
+
+  setActive();
+  window.addEventListener("scroll", setActive, { passive: true });
+  window.addEventListener("resize", setActive, { passive: true });
+</script>
+
+<style>
+  .dev-sec-panel {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 9999;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(20, 14, 10, 0.78);
+    color: #f5ecd9;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    user-select: none;
+    max-width: 200px;
+  }
+  .dev-sec-title {
+    font-size: 9px;
+    opacity: 0.55;
+    letter-spacing: 0.18em;
+    margin-bottom: 6px;
+  }
+  .dev-sec-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .dev-sec-list li {
+    display: flex;
+    gap: 8px;
+    opacity: 0.45;
+    transition: opacity 120ms ease;
+  }
+  .dev-sec-list li.is-on {
+    opacity: 1;
+    color: #ff8a5b;
+  }
+  .dev-sec-n {
+    color: #c9a37a;
+    width: 18px;
+  }
+</style>

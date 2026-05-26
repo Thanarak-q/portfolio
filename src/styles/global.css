@@ -521,8 +521,6 @@ section.content {
   position: relative;
   z-index: 2;
   padding: 140px 0;
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 800px;
 }
 
 .wrap {
@@ -699,6 +697,368 @@ p.lead {
 /* ─── Focus flow ─────────────────────────────── */
 .focus-flow { position: relative; z-index: 2; }
 
+.focus-empty {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+}
+
+/* ─── Image reveal (Telha-style static stack) ── */
+.focus-loop {
+  position: relative;
+  z-index: 2;
+}
+
+.image-reveal-static {
+  position: relative;
+  padding: 120px 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+}
+
+.image-reveal-static + .image-reveal-static {
+  padding-top: 40px;
+}
+
+.ir-meta-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0;
+}
+
+.ir-counter {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.ir-title {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: clamp(20px, 4vw, 80px);
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-size: clamp(72px, 12vw, 220px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-align: center;
+  padding: 0 24px;
+}
+
+.ir-bracket {
+  font-weight: 300;
+}
+
+.ir-name {
+  font-style: normal;
+}
+
+.ir-image {
+  width: min(48vw, 720px);
+  height: min(70vh, 840px);
+  overflow: hidden;
+  border-radius: 4px;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  align-self: center;
+}
+
+.ir-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ir-meta-bottom {
+  width: min(48vw, 720px);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: -16px auto 0;
+}
+
+@media (max-width: 720px) {
+  .image-reveal-static {
+    padding: 80px 0 56px;
+    gap: 28px;
+  }
+  .image-reveal-static + .image-reveal-static {
+    padding-top: 24px;
+  }
+  .ir-title {
+    font-size: clamp(44px, 14vw, 88px);
+    gap: 14px;
+  }
+  .ir-image {
+    width: calc(100vw - 32px);
+    aspect-ratio: 3 / 4;
+  }
+  .ir-meta-bottom {
+    width: calc(100vw - 32px);
+    font-size: 11px;
+  }
+  .ir-meta-top {
+    font-size: 10px;
+  }
+}
+
+/* ─── Books · reading log ──────────────────── */
+@keyframes bc-fade-rise {
+  from { opacity: 0; translate: 0 18px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+
+.books-collage {
+  position: relative;
+  height: 95vh;
+  min-height: 680px;
+  max-height: 920px;
+  overflow: hidden;
+}
+
+/* ── header strip (label · counter · year) ── */
+.bc-header {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  display: flex;
+  gap: 28px;
+  align-items: baseline;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft, rgba(20, 14, 10, 0.5));
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.bc-meta-label {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--ink, #140e0a);
+}
+
+.bc-meta-counter {
+  color: var(--accent, #d65a3a);
+  font-variant-numeric: tabular-nums;
+  transition: color 280ms ease;
+}
+
+.books-collage.is-visible .bc-header {
+  animation: bc-fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards;
+  opacity: 1;
+}
+
+/* ── center pull-quote stage ── */
+.bc-stage {
+  --mx: 0px;
+  --my: 0px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my)));
+  max-width: min(760px, 78vw);
+  width: 100%;
+  text-align: center;
+  pointer-events: none;
+  user-select: none;
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bc-quote {
+  margin: 0;
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-size: clamp(34px, 5vw, 64px);
+  line-height: 1.18;
+  color: var(--ink, #140e0a);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.bc-quote-mark {
+  color: var(--accent, #d65a3a);
+  font-style: italic;
+  margin: 0 0.04em;
+}
+
+.bc-attribution {
+  margin: 24px 0 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft, rgba(20, 14, 10, 0.55));
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.books-collage.is-visible .bc-quote {
+  animation: bc-fade-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.30s backwards;
+  opacity: 1;
+}
+
+.books-collage.is-visible .bc-attribution {
+  animation: bc-fade-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.46s backwards;
+  opacity: 1;
+}
+
+/* ── book cards on the perimeter ── */
+.books-card {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 220px;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.books-collage.is-visible .books-card {
+  animation: bc-fade-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  opacity: 1;
+}
+
+.books-collage.is-visible .books-card-1 { animation-delay: 0.58s; }
+.books-collage.is-visible .books-card-2 { animation-delay: 0.66s; }
+.books-collage.is-visible .books-card-3 { animation-delay: 0.74s; }
+.books-collage.is-visible .books-card-4 { animation-delay: 0.82s; }
+.books-collage.is-visible .books-card-5 { animation-delay: 0.90s; }
+.books-collage.is-visible .books-card-6 { animation-delay: 0.98s; }
+
+.bc-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft, rgba(20, 14, 10, 0.4));
+  transition: color 320ms ease, letter-spacing 320ms ease;
+}
+
+.bc-title {
+  font-family: "Instrument Serif", serif;
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.35;
+  color: var(--ink, #140e0a);
+  transition: color 320ms ease;
+}
+
+/* active state — driven by JS class + auto-cycle */
+.books-card.is-active .bc-num {
+  color: var(--accent, #d65a3a);
+  letter-spacing: 0.28em;
+}
+
+/* dim other cards when user is hovering any */
+.books-collage[data-hovering="true"] .books-card:not(.is-active) .bc-num {
+  color: rgba(20, 14, 10, 0.18);
+}
+.books-collage[data-hovering="true"] .books-card:not(.is-active) .bc-title {
+  color: rgba(20, 14, 10, 0.22);
+}
+
+.books-card:focus-visible {
+  outline: 1px solid var(--accent, #d65a3a);
+  outline-offset: 10px;
+}
+
+/* clean grid layout — 3 left, 3 right, no rotation */
+.books-card-1 { top: 22%; left:  6%; align-items: flex-start; text-align: left; }
+.books-card-2 { top: 22%; right: 6%; align-items: flex-end;   text-align: right; }
+.books-card-3 { top: 50%; left:  3%; align-items: flex-start; text-align: left;
+                transform: translateY(-50%); }
+.books-card-4 { top: 50%; right: 3%; align-items: flex-end;   text-align: right;
+                transform: translateY(-50%); }
+.books-card-5 { bottom: 18%; left:  6%; align-items: flex-start; text-align: left; }
+.books-card-6 { bottom: 18%; right: 6%; align-items: flex-end;   text-align: right; }
+
+@media (max-width: 880px) {
+  .books-collage {
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    padding: 80px 24px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  .bc-header {
+    position: static;
+    transform: none;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+
+  .bc-stage {
+    position: static;
+    transform: none;
+    max-width: 100%;
+    margin: 0 auto 64px;
+    transition: none;
+  }
+
+  .bc-quote {
+    font-size: clamp(24px, 5.5vw, 36px);
+  }
+
+  .books-card {
+    position: static;
+    transform: none;
+    max-width: 100%;
+    width: 100%;
+    align-items: flex-start !important;
+    text-align: left !important;
+    padding: 18px 0;
+    border-top: 1px solid rgba(20, 14, 10, 0.08);
+  }
+
+  .books-card:last-of-type {
+    border-bottom: 1px solid rgba(20, 14, 10, 0.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .books-card,
+  .bc-header,
+  .bc-quote,
+  .bc-attribution { opacity: 1; }
+  .books-collage.is-visible .books-card,
+  .books-collage.is-visible .bc-header,
+  .books-collage.is-visible .bc-quote,
+  .books-collage.is-visible .bc-attribution { animation: none; }
+  .bc-stage { transition: none; }
+}
+
 .focus-flow-sticky {
   position: sticky;
   top: 0;
@@ -724,6 +1084,7 @@ p.lead {
   color: var(--ink);
   transform-origin: top left;
   will-change: transform, opacity;
+  opacity: 0;
 }
 .focus-flow-intro .eyebrow {
   margin-bottom: 0;
@@ -820,7 +1181,7 @@ p.lead {
   display: flex;
   align-items: flex-start;
   padding: 0;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   opacity: 0;
 }
 
@@ -1464,6 +1825,92 @@ p.lead {
 
 .link-pill:hover .arrow {
   opacity: 1;
+}
+
+/* ─── Contact section · video background ─────── */
+#contact.contact-bg {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+}
+
+.contact-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* very thin edge gradients only — just so eyebrow and footer don't fight bright frames */
+.contact-bg-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg,
+      rgba(20, 14, 10, 0.18) 0%,
+      transparent 14%,
+      transparent 86%,
+      rgba(20, 14, 10, 0.22) 100%
+    );
+}
+
+#contact.contact-bg .wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* legibility shadow for the big italic over live video */
+#contact.contact-bg .big-statement {
+  text-shadow:
+    0 1px 32px rgba(247, 236, 214, 0.65),
+    0 2px 8px rgba(247, 236, 214, 0.45);
+}
+
+/* eyebrow — punch up so the 04 — CONTACT label reads over bright sky */
+#contact.contact-bg .eyebrow {
+  color: var(--ink, #140e0a);
+  text-shadow: 0 1px 14px rgba(247, 236, 214, 0.7);
+}
+#contact.contact-bg .eyebrow::before {
+  opacity: 0.85;
+}
+
+/* footer — was floating in white flowers; ground it with a soft glass strip */
+#contact.contact-bg .foot {
+  position: relative;
+  margin-top: 64px;
+  padding: 22px 28px;
+  border-radius: 999px;
+  background: rgba(20, 14, 10, 0.42);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  color: rgba(247, 236, 214, 0.86);
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  display: inline-block;
+  text-align: center;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid rgba(247, 236, 214, 0.16);
+}
+
+/* contact card — slightly more substantial glass over busy video */
+#contact.contact-bg .contact-card {
+  background:
+    linear-gradient(180deg, rgba(247, 236, 214, 0.38), rgba(247, 236, 214, 0.26));
+  border-color: rgba(247, 236, 214, 0.42);
+  box-shadow:
+    0 18px 60px rgba(20, 14, 10, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 /* ─── Footer ──────────────────────────────────── */

@@ -9,11 +9,17 @@ export interface StatItem {
 }
 
 export interface FocusItem {
-  number: string;
+  name: string;
+  type: string;
+  year: string;
+  duration: string;
+  src: string;
+  alt: string;
+}
+
+export interface BookNote {
   title: string;
-  titleItalic: string;
-  description: string;
-  tags: string[];
+  note: string;
 }
 
 export interface WorkItem {
@@ -60,68 +66,79 @@ export const aboutStats: StatItem[] = [
 
 export const focusItems: FocusItem[] = [
   {
-    number: "02 / 01",
-    title: "Red Team",
-    titleItalic: "Operations",
-    description:
-      "Adversary emulation, assumed breach, internal pivots, and physical/social blends. Build playbooks that survive contact with reality.",
-    tags: ["MITRE ATT&CK", "C2", "AD", "Phishing", "EDR Bypass"],
+    name: "Red Team",
+    type: "Adversary emulation",
+    year: "2025",
+    duration: "17 – 25′",
+    src: "/assets/chair.png",
+    alt: "Empty chair, low light",
   },
   {
-    number: "02 / 02",
-    title: "AI",
-    titleItalic: "Security",
-    description:
-      "Prompt injection, indirect injection, agent tool abuse, model supply chain, jailbreak research, eval harnesses for safety regressions.",
-    tags: ["LLM Pentest", "RAG", "Guardrails", "MCP", "Red Eval"],
+    name: "AI Security",
+    type: "Prompt & agent research",
+    year: "2025",
+    duration: "12 – 18′",
+    src: "/assets/flower.png",
+    alt: "Single flower, close crop",
   },
   {
-    number: "02 / 03",
-    title: "Cloud &",
-    titleItalic: "App",
-    description:
-      "Web app pentest, cloud config audits, identity attack paths, container escape. The boring layer between the model and the metal.",
-    tags: ["AWS", "K8s", "OWASP", "IAM", "Burp"],
+    name: "Field Notes",
+    type: "Public writeups",
+    year: "Ongoing",
+    duration: "06 – 10′",
+    src: "/assets/bird.png",
+    alt: "Bird in flight",
   },
   {
-    number: "02 / 04",
-    title: "Field",
-    titleItalic: "Notes",
-    description:
-      "Public writeups, open-source harnesses, a small Substack on jailbreak taxonomy. The part of the work that doesn't sit in a vault.",
-    tags: ["Writeups", "OSS", "Talks", "Workshops"],
+    name: "Custom Tooling",
+    type: "Implants & harnesses",
+    year: "2024",
+    duration: "14 – 22′",
+    src: "/assets/flowerandbird.png",
+    alt: "Flower with bird",
   },
   {
-    number: "02 / 05",
-    title: "Threat",
-    titleItalic: "Intel",
-    description:
-      "Tracking actor TTPs, mapping infrastructure, and turning raw telemetry into something a defender can actually act on at 3 a.m.",
-    tags: ["TTPs", "STIX", "OSINT", "Pivoting", "YARA"],
+    name: "Threat Intel",
+    type: "TTP tracking",
+    year: "2024",
+    duration: "09 – 15′",
+    src: "/assets/moutainandbird.png",
+    alt: "Mountain ridge with bird",
   },
   {
-    number: "02 / 06",
-    title: "Custom",
-    titleItalic: "Tooling",
-    description:
-      "Implants, loaders, eval harnesses, and tiny CLIs that I rewrite every other year. Built so the next engagement starts at the deep end.",
-    tags: ["Rust", "Go", "Implants", "C2 Profiles", "Tradecraft"],
+    name: "Cinema Off-hours",
+    type: "16mm · slow shutter",
+    year: "Ongoing",
+    duration: "—",
+    src: "/assets/moutainandocean.png",
+    alt: "Mountain meeting the ocean at dawn",
+  },
+];
+
+export const booksRead: BookNote[] = [
+  {
+    title: "The Art of Memory — Frances Yates",
+    note: "Why method actors and red-teamers both keep palaces.",
   },
   {
-    number: "02 / 07",
-    title: "Purple",
-    titleItalic: "Bridge",
-    description:
-      "The handoff between offense and detection — replayable scenarios, ATT&CK coverage maps, and the boring meetings that ship signal.",
-    tags: ["Detection", "Replay", "Coverage", "SIEM", "Sigma"],
+    title: "Ways of Seeing — John Berger",
+    note: "The frame is half the exploit.",
   },
   {
-    number: "02 / 08",
-    title: "Cinema",
-    titleItalic: "Off-hours",
-    description:
-      "16mm, slow shutter, lake at dawn. The hour I let go of the keyboard so the next exploit has somewhere to land.",
-    tags: ["Film", "Process", "Slow", "Quiet", "Frame"],
+    title: "Thinking in Systems — Donella Meadows",
+    note: "Find the leverage point. Push.",
+  },
+  {
+    title: "The Cuckoo's Egg — Clifford Stoll",
+    note: "The original blue-team logbook, still the best.",
+  },
+  {
+    title: "In Praise of Shadows — Jun'ichirō Tanizaki",
+    note: "Dim the room. Watch what surfaces.",
+  },
+  {
+    title: "The Phoenix Project — Gene Kim",
+    note: "Read it for the empathy, not the playbook.",
   },
 ];
 

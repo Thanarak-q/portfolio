@@ -24,6 +24,14 @@ function useReveal(
     const el = ref.current;
     if (!el) return;
 
+    // If element is already above the trigger start on mount (e.g. page loaded
+    // scrolled past this section), reveal it immediately — otherwise it stays
+    // stuck at opacity 0 because onEnter only fires on a downward crossing.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.95) {
+      compute(el, 1);
+    }
+
     const st = ScrollTrigger.create({
       trigger: el,
       start: "top 95%",
@@ -149,6 +157,20 @@ export function LineReveal({
     if (!el) return;
 
     const rows = el.querySelectorAll<HTMLElement>(".line-reveal-row > span");
+
+    const revealAll = () => {
+      rows.forEach((span, i) => {
+        const local = easeOutCubic(withDelay(1, i * stagger));
+        span.style.transform = `translate3d(0, ${(1 - local) * 110}%, 0)`;
+        span.style.opacity = String(local);
+      });
+    };
+
+    // Already in/past viewport on mount → reveal immediately.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.95) {
+      revealAll();
+    }
 
     const st = ScrollTrigger.create({
       trigger: el,
