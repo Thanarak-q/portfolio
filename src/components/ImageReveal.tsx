@@ -43,8 +43,11 @@ export default function ImageReveal({
     // Bell-curve scale: small entering, full at center, small leaving.
     // p=0 → image just entering bottom; p=0.5 → centered; p=1 → fully exited top.
     const apply = (p: number) => {
+      const isMobile = window.matchMedia("(max-width: 720px)").matches;
       const bell = Math.sin(clamp01(p) * Math.PI); // 0 → 1 → 0
-      const scale = 0.6 + 0.55 * bell; // 0.6 → 1.15 → 0.6
+      const scale = isMobile
+        ? 0.86 + 0.14 * bell
+        : 0.6 + 0.55 * bell; // desktop: 0.6 → 1.15 → 0.6
       image.style.transform = `scale(${scale})`;
     };
 
