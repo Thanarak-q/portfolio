@@ -23,7 +23,7 @@ export default function ImageReveal({
   index,
   total,
   name,
-  eyebrow = "Selected works · 02",
+  eyebrow = "Focus",
   duration,
   type,
   year,
@@ -73,13 +73,10 @@ export default function ImageReveal({
         <span className="ir-counter">
           {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </span>
-        {duration && <span className="ir-duration">{duration}</span>}
       </div>
 
       <h2 className="ir-title">
-        <span className="ir-bracket" aria-hidden="true">[</span>
         <span className="ir-name">{name}</span>
-        <span className="ir-bracket" aria-hidden="true">]</span>
       </h2>
 
       <div ref={imageRef} className="ir-image">

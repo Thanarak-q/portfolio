@@ -32,14 +32,14 @@ import {
     </div>
     <div class="nav-links">
       {navLinks.map((link) => (
-        <a href={link.href}>{link.label}</a>
+        <a href={link.href} data-nav-link={link.label}>{link.label}</a>
       ))}
     </div>
-    <a class="nav-cta" href="#contact">Contact</a>
+    <a class="nav-cta" href="#contact" data-nav-link="Contact">Contact</a>
   </nav>
 
   <!-- HERO -->
-  <div id="hero">
+  <div>
   <HeroClip
     client:load
     src="/assets/clip-1-scrub.mp4"
@@ -63,15 +63,32 @@ import {
     client:load
     src="/assets/clip-2-scrub.mp4"
     eyebrow="Interlude — 00:06 / 00:18"
-    title="Offense starts"
-    titleItalic="with observation."
-    caption="I map assumptions, access paths, and human workflows before touching the first exploit."
+    title="Start with"
+    titleItalic="the basics."
+    caption="Good security work starts with careful observation, clear notes, and understanding how the system actually behaves."
     runwayVH={400}
     exitDirection="left"
   />
   </div>
 
   <section id="focus" class="focus-loop">
+    <div class="focus-loop-intro wrap" data-focus-intro>
+      <div class="focus-loop-copy">
+        <div class="eyebrow" data-focus-intro-item>02 — Focus</div>
+        <h2 class="focus-loop-title">
+          <span class="focus-loop-title-row">
+            <span data-focus-intro-line>What I'm</span>
+          </span>
+          <span class="focus-loop-title-row focus-loop-title-row--accent">
+            <em data-focus-intro-line>practicing now.</em>
+          </span>
+        </h2>
+        <p class="focus-loop-caption" data-focus-intro-item>
+          Web security, red-team basics, AI security, and practical lab work.
+        </p>
+      </div>
+    </div>
+
     {focusItems.map((item, i) => (
       <ImageReveal
         client:load
@@ -95,9 +112,9 @@ import {
     client:load
     src="/assets/clip-3-scrub.mp4"
     eyebrow="Interlude — 00:12 / 00:18"
-    title="Good findings"
-    titleItalic="become better systems."
-    caption="The point is not just impact. It is a clear path from evidence to remediation."
+    title="Learn, test,"
+    titleItalic="improve."
+    caption="Each lab, challenge, and write-up adds a little more clarity to how systems break and how they can be made safer."
     runwayVH={400}
   />
   </div>
@@ -106,7 +123,7 @@ import {
   <section id="work" class="content">
     <div class="wrap">
       <RiseIn client:load distance={40}>
-        <div class="eyebrow">03 — Selected work</div>
+        <div class="eyebrow">03 — Experience</div>
       </RiseIn>
 
       <LineReveal
@@ -159,9 +176,9 @@ import {
 
       <div class="glass-liquid contact-card">
         <p class="body contact-intro">
-          Available for red-team engagements, AI-security research, cloud and
-          identity reviews, and focused collaborations with teams that want
-          practical findings.
+          Interested in junior cybersecurity roles, CTF collaboration,
+          security research, and hands-on work that builds real offensive
+          security experience.
         </p>
         <div class="contact-actions">
           {contactLinks.map((link) => (
@@ -184,8 +201,175 @@ import {
   </section>
 
   <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
     const contactVideo = document.querySelector<HTMLVideoElement>("[data-contact-video]");
     const contactSection = document.getElementById("contact");
+    const navLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
+    );
+
+    const sectionMap = [
+      { id: "hero", label: "Intro" },
+      { id: "about", label: "About" },
+      { id: "role-slide", label: "About" },
+      { id: "interlude-1", label: "Focus" },
+      { id: "focus", label: "Focus" },
+      { id: "interlude-2", label: "Focus" },
+      { id: "work", label: "Work" },
+      { id: "contact", label: "Contact" },
+    ];
+
+    const navSections = sectionMap
+      .map((item) => {
+        const element = document.getElementById(item.id);
+        return element ? { ...item, element } : null;
+      })
+      .filter(Boolean);
+
+    let activeLabel = "Intro";
+
+    const renderActiveSection = (label: string) => {
+      activeLabel = label;
+
+      navLinks.forEach((link) => {
+        const isActive = link.dataset.navLink === label;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const updateActiveSection = () => {
+      if (!navSections.length) return;
+
+      const probe = window.scrollY + window.innerHeight * 0.36;
+      let nextLabel = navSections[0].label;
+
+      for (const item of navSections) {
+        const top = item.element.offsetTop;
+        const bottom = top + item.element.offsetHeight;
+
+        if (probe >= top && probe < bottom) {
+          nextLabel = item.label;
+        }
+      }
+
+      if (nextLabel !== activeLabel) {
+        renderActiveSection(nextLabel);
+      }
+    };
+
+    renderActiveSection(activeLabel);
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    const focusIntro = document.querySelector<HTMLElement>("[data-focus-intro]");
+    const focusIntroItems = gsap.utils.toArray<HTMLElement>("[data-focus-intro-item]");
+    const focusIntroLines = gsap.utils.toArray<HTMLElement>("[data-focus-intro-line]");
+
+    if (
+      focusIntro &&
+      focusIntroItems.length &&
+      focusIntroLines.length &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      const focusIntroCopy = focusIntro.querySelector<HTMLElement>(".focus-loop-copy");
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: focusIntro,
+          start: "top 78%",
+          once: true,
+        },
+      })
+      .fromTo(
+        focusIntroItems,
+        {
+          y: 36,
+          opacity: 0,
+          filter: "blur(10px)",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.9,
+          stagger: 0.14,
+          ease: "power3.out",
+        }
+      )
+      .fromTo(
+        focusIntroLines[0],
+        {
+          yPercent: 125,
+          xPercent: -16,
+          rotate: 4,
+          opacity: 0,
+        },
+        {
+          yPercent: 0,
+          xPercent: 0,
+          rotate: 0,
+          opacity: 1,
+          duration: 1.05,
+          ease: "power4.out",
+        },
+        0.02
+      )
+      .fromTo(
+        focusIntroLines[1],
+        {
+          yPercent: 135,
+          xPercent: 12,
+          rotate: -5,
+          opacity: 0,
+        },
+        {
+          yPercent: 0,
+          xPercent: 0,
+          rotate: 0,
+          opacity: 1,
+          duration: 1.1,
+          ease: "power4.out",
+        },
+        0.14
+      )
+      .fromTo(
+        focusIntro,
+        {
+          "--focus-rule-scale": 0.2,
+        },
+        {
+          "--focus-rule-scale": 1,
+          duration: 0.9,
+          ease: "power3.out",
+        },
+        0.08
+      );
+
+      if (focusIntroCopy) {
+        gsap.to(focusIntroCopy, {
+          yPercent: -22,
+          opacity: 0.12,
+          scale: 0.9,
+          ease: "none",
+          scrollTrigger: {
+            trigger: focusIntro,
+            start: "center center",
+            end: "bottom top",
+            scrub: 0.9,
+          },
+        });
+      }
+    }
 
     if (contactVideo && contactSection) {
       const playContactVideo = () => {

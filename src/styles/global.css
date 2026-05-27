@@ -349,12 +349,31 @@ body.is-loaded .site-loader {
     font-weight: 500;
     transition:
         background 0.2s,
-        color 0.2s;
+        color 0.2s,
+        box-shadow 0.2s;
 }
 
 .nav-links a:hover {
     background: rgba(255, 255, 255, 0.45);
     color: var(--ink);
+}
+
+.nav-links a.is-active,
+.nav-cta.is-active {
+    background: rgba(255, 255, 255, 0.62);
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px rgba(214, 90, 58, 0.14);
+}
+
+.nav-links a.is-active::before,
+.nav-cta.is-active::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--leak-deep);
+    margin-right: 8px;
+    box-shadow: 0 0 0 3px rgba(214, 90, 58, 0.14);
 }
 
 .nav-cta {
@@ -369,6 +388,7 @@ body.is-loaded .site-loader {
     transition: background 0.2s;
     position: relative;
     z-index: 3;
+    white-space: nowrap;
 }
 
 .nav-cta:hover {
@@ -1071,6 +1091,81 @@ p.lead {
     z-index: 2;
 }
 
+.focus-loop-intro {
+    --focus-rule-scale: 0;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 150px;
+    padding-bottom: 18vh;
+    position: relative;
+}
+
+.focus-loop-copy {
+    max-width: 560px;
+    position: relative;
+    text-align: center;
+}
+
+.focus-loop-copy::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -52px;
+    width: 120px;
+    height: 1px;
+    background: rgba(20, 10, 5, 0.18);
+    translate: -50% 0;
+    transform: scaleX(var(--focus-rule-scale));
+    transform-origin: center center;
+}
+
+.focus-loop-title {
+    margin: 18px 0 0;
+    max-width: 7ch;
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(58px, 6vw, 92px);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+}
+
+.focus-loop-title-row {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.04em;
+    margin-bottom: -0.04em;
+}
+
+.focus-loop-title-row > span,
+.focus-loop-title-row > em {
+    display: block;
+    will-change: transform, opacity;
+}
+
+.focus-loop-title em {
+    display: block;
+    font-style: italic;
+    color: var(--leak-deep);
+}
+
+.focus-loop-caption {
+    margin: 24px 0 0;
+    max-width: 28ch;
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+}
+
+.focus-loop-intro + .image-reveal-static {
+    padding-top: 340px;
+}
+
 .image-reveal-static {
     position: relative;
     padding: 120px 0 80px;
@@ -1108,7 +1203,6 @@ p.lead {
     display: flex;
     justify-content: center;
     align-items: baseline;
-    gap: clamp(20px, 4vw, 80px);
     font-family: "Instrument Serif", serif;
     font-weight: 400;
     font-size: clamp(72px, 12vw, 220px);
@@ -1117,10 +1211,6 @@ p.lead {
     color: var(--ink);
     text-align: center;
     padding: 0 24px;
-}
-
-.ir-bracket {
-    font-weight: 300;
 }
 
 .ir-name {
@@ -1207,26 +1297,43 @@ p.lead {
         gap: 24px;
         overflow: hidden;
     }
+
+    .focus-loop-intro {
+        min-height: 88vh;
+        padding-top: 112px;
+        padding-bottom: 96px;
+    }
+
+    .focus-loop-title {
+        max-width: 7ch;
+        font-size: clamp(46px, 12vw, 60px);
+    }
+
+    .focus-loop-caption {
+        margin-top: 18px;
+        max-width: 22ch;
+        font-size: clamp(17px, 4.8vw, 21px);
+    }
+
+    .focus-loop-intro + .image-reveal-static {
+        padding-top: 220px;
+    }
+
     .image-reveal-static + .image-reveal-static {
         padding-top: 34px;
     }
 
     .ir-meta-top {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        row-gap: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
         font-size: 9.5px;
         letter-spacing: 0.16em;
-    }
-
-    .ir-duration {
-        grid-column: 1 / -1;
     }
 
     .ir-title {
         font-size: clamp(42px, 12.5vw, 62px);
         line-height: 0.94;
-        gap: 8px;
         padding: 0 18px;
     }
     .ir-image {
@@ -2350,11 +2457,11 @@ p.lead {
 }
 
 #work.content {
-    min-height: 100vh;
-    margin-top: -120px;
-    padding: 96px 0 56px;
+    min-height: auto;
+    margin-top: -36px;
+    padding: 48px 0 104px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 #work .wrap {
@@ -2368,23 +2475,25 @@ p.lead {
 
 .row {
     display: grid;
-    grid-template-columns: 80px 1.6fr 1.4fr 130px;
-    gap: 20px;
-    align-items: center;
-    padding: 21px 28px;
+    grid-template-columns: 72px minmax(220px, 1.2fr) minmax(260px, 1.5fr) auto;
+    gap: 22px;
+    align-items: start;
+    padding: 24px 28px;
 }
 
 .row .num {
     font-family: "JetBrains Mono", monospace;
     font-size: 12px;
     color: var(--ink-mute);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
+    padding-top: 6px;
 }
 
 .row .title {
     font-family: "Instrument Serif", serif;
-    font-size: 28px;
-    line-height: 1.1;
+    font-size: 31px;
+    line-height: 1.02;
+    max-width: 13ch;
 }
 
 .row .title .it {
@@ -2395,15 +2504,26 @@ p.lead {
 .row .desc {
     font-size: 14.5px;
     color: var(--ink-soft);
-    line-height: 1.45;
+    line-height: 1.55;
+    max-width: 44ch;
 }
 
 .row .meta {
     font-family: "JetBrains Mono", monospace;
     font-size: 11px;
-    color: var(--ink-mute);
-    letter-spacing: 0.1em;
+    color: var(--ink);
+    letter-spacing: 0.14em;
     text-align: right;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.38);
+    box-shadow:
+        inset 0 0 0 1px rgba(20, 10, 5, 0.08),
+        0 8px 20px -16px rgba(20, 10, 5, 0.25);
 }
 
 @media (max-width: 880px) {
@@ -2423,8 +2543,14 @@ p.lead {
         padding-top: 6px;
     }
 
+    .row .title,
+    .row .desc {
+        max-width: none;
+    }
+
     .row .meta {
         text-align: left;
+        justify-self: start;
     }
 }
 
@@ -3126,6 +3252,7 @@ footer.foot {
 
 .work-list {
     margin-top: 40px;
+    margin-bottom: 720px;
     border-radius: 28px;
     padding: 0;
     overflow: hidden;
@@ -3215,6 +3342,7 @@ footer.foot {
 
     .work-list {
         margin-top: 30px;
+        margin-bottom: 520px;
         border-radius: 22px;
     }
 
