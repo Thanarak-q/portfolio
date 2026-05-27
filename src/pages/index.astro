@@ -7,6 +7,7 @@ import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
 import ImageReveal from "../components/ImageReveal";
 import PyramidFlip from "../components/PyramidFlip";
 import RoleSlide from "../components/RoleSlide";
+import BookShelf from "../components/BookShelf";
 import {
   aboutLines,
   aboutStats,
@@ -85,123 +86,8 @@ import {
       />
     ))}
 
-    <section class="books-collage">
-      <header class="bc-header">
-        <h2 class="bc-meta-label">Reading log</h2>
-        <span class="bc-meta-counter" data-counter>01 / {String(booksRead.length).padStart(2, "0")}</span>
-        <span class="bc-meta-year">2025 — 2026</span>
-      </header>
-
-      <div class="bc-stage" aria-live="polite">
-        <p class="bc-quote">
-          <span class="bc-quote-mark" aria-hidden="true">&ldquo;</span><span class="bc-quote-text" data-quote>{booksRead[0].note}</span><span class="bc-quote-mark" aria-hidden="true">&rdquo;</span>
-        </p>
-        <p class="bc-attribution" data-attribution>— {booksRead[0].title}</p>
-      </div>
-
-      {booksRead.map((b, i) => (
-        <button
-          type="button"
-          class:list={["books-card", `books-card-${i + 1}`, { "is-active": i === 0 }]}
-          data-index={i}
-          data-note={b.note}
-          data-title={b.title}
-        >
-          <span class="bc-num">{String(i + 1).padStart(2, "0")}</span>
-          <span class="bc-title">{b.title}</span>
-        </button>
-      ))}
-    </section>
+    <BookShelf client:load books={booksRead} />
   </section>
-
-  <script>
-    const collage = document.querySelector<HTMLElement>(".books-collage");
-    if (collage) {
-      const cards = Array.from(collage.querySelectorAll<HTMLButtonElement>(".books-card"));
-      const quoteEl = collage.querySelector<HTMLElement>("[data-quote]");
-      const attrEl = collage.querySelector<HTMLElement>("[data-attribution]");
-      const counterEl = collage.querySelector<HTMLElement>("[data-counter]");
-      const stageEl = collage.querySelector<HTMLElement>(".bc-stage");
-      const total = cards.length;
-      const pad = (n: number) => String(n).padStart(2, "0");
-
-      let active = 0;
-      let timer = 0;
-      let hovering = false;
-
-      const setActive = (idx: number) => {
-        if (idx === active) return;
-        active = idx;
-        const card = cards[idx];
-        if (!card) return;
-        const note = card.dataset.note ?? "";
-        const title = card.dataset.title ?? "";
-
-        cards.forEach((c, i) => c.classList.toggle("is-active", i === idx));
-
-        if (quoteEl) quoteEl.style.opacity = "0";
-        if (attrEl) attrEl.style.opacity = "0";
-
-        window.setTimeout(() => {
-          if (quoteEl) {
-            quoteEl.textContent = note;
-            quoteEl.style.opacity = "1";
-          }
-          if (attrEl) {
-            attrEl.textContent = `— ${title}`;
-            attrEl.style.opacity = "1";
-          }
-          if (counterEl) counterEl.textContent = `${pad(idx + 1)} / ${pad(total)}`;
-        }, 220);
-      };
-
-      const startCycle = () => {
-        window.clearInterval(timer);
-        timer = window.setInterval(() => {
-          if (hovering) return;
-          setActive((active + 1) % total);
-        }, 4500);
-      };
-
-      cards.forEach((card, i) => {
-        const enter = () => {
-          hovering = true;
-          collage.setAttribute("data-hovering", "true");
-          setActive(i);
-        };
-        const leave = () => {
-          hovering = false;
-          collage.removeAttribute("data-hovering");
-        };
-        card.addEventListener("mouseenter", enter);
-        card.addEventListener("focus", enter);
-        card.addEventListener("mouseleave", leave);
-        card.addEventListener("blur", leave);
-      });
-
-      if (stageEl) {
-        let raf = 0;
-        document.addEventListener("mousemove", (e) => {
-          cancelAnimationFrame(raf);
-          raf = requestAnimationFrame(() => {
-            const dx = (e.clientX / window.innerWidth - 0.5) * 14;
-            const dy = (e.clientY / window.innerHeight - 0.5) * 9;
-            stageEl.style.setProperty("--mx", `${dx}px`);
-            stageEl.style.setProperty("--my", `${dy}px`);
-          });
-        }, { passive: true });
-      }
-
-      new IntersectionObserver(([e]) => {
-        if (e.isIntersecting) {
-          collage.classList.add("is-visible");
-          startCycle();
-        } else {
-          window.clearInterval(timer);
-        }
-      }, { threshold: 0.15 }).observe(collage);
-    }
-  </script>
 
   <!-- INTERLUDE 2 -->
   <div id="interlude-2">
