@@ -32,10 +32,10 @@ import {
     </div>
     <div class="nav-links">
       {navLinks.map((link) => (
-        <a href={link.href}>{link.label}</a>
+        <a href={link.href} data-nav-link={link.label}>{link.label}</a>
       ))}
     </div>
-    <a class="nav-cta" href="#contact">Contact</a>
+    <a class="nav-cta" href="#contact" data-nav-link="Contact">Contact</a>
   </nav>
 
   <!-- HERO -->
@@ -106,7 +106,7 @@ import {
   <section id="work" class="content">
     <div class="wrap">
       <RiseIn client:load distance={40}>
-        <div class="eyebrow">03 — Selected work</div>
+        <div class="eyebrow">03 — Experience</div>
       </RiseIn>
 
       <LineReveal
@@ -159,9 +159,9 @@ import {
 
       <div class="glass-liquid contact-card">
         <p class="body contact-intro">
-          Available for red-team engagements, AI-security research, cloud and
-          identity reviews, and focused collaborations with teams that want
-          practical findings.
+          Interested in junior cybersecurity roles, CTF collaboration,
+          security research, and hands-on work that builds real offensive
+          security experience.
         </p>
         <div class="contact-actions">
           {contactLinks.map((link) => (
@@ -186,6 +186,68 @@ import {
   <script>
     const contactVideo = document.querySelector<HTMLVideoElement>("[data-contact-video]");
     const contactSection = document.getElementById("contact");
+    const navLinks = Array.from(
+      document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
+    );
+
+    const sectionMap = [
+      { id: "hero", label: "Intro" },
+      { id: "about", label: "About" },
+      { id: "role-slide", label: "About" },
+      { id: "interlude-1", label: "Focus" },
+      { id: "focus", label: "Focus" },
+      { id: "interlude-2", label: "Focus" },
+      { id: "work", label: "Work" },
+      { id: "contact", label: "Contact" },
+    ];
+
+    const navSections = sectionMap
+      .map((item) => {
+        const element = document.getElementById(item.id);
+        return element ? { ...item, element } : null;
+      })
+      .filter(Boolean);
+
+    let activeLabel = "Intro";
+
+    const renderActiveSection = (label: string) => {
+      activeLabel = label;
+
+      navLinks.forEach((link) => {
+        const isActive = link.dataset.navLink === label;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) {
+          link.setAttribute("aria-current", "location");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    const updateActiveSection = () => {
+      if (!navSections.length) return;
+
+      const probe = window.scrollY + window.innerHeight * 0.36;
+      let nextLabel = navSections[0].label;
+
+      for (const item of navSections) {
+        const top = item.element.offsetTop;
+        const bottom = top + item.element.offsetHeight;
+
+        if (probe >= top && probe < bottom) {
+          nextLabel = item.label;
+        }
+      }
+
+      if (nextLabel !== activeLabel) {
+        renderActiveSection(nextLabel);
+      }
+    };
+
+    renderActiveSection(activeLabel);
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
 
     if (contactVideo && contactSection) {
       const playContactVideo = () => {

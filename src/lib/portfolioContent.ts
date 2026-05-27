@@ -150,51 +150,52 @@ export const booksRead: BookNote[] = [
   },
 ];
 
-export const workLines = ["Selected work from", "<em>offensive security.</em>"];
+export const workLines = ["Experience built through", "<em>competition and labs.</em>"];
 
 export const workItems: WorkItem[] = [
   {
     number: "001",
-    title: "Shadow",
-    titleItalic: "Operator",
+    title: "Certified in",
+    titleItalic: "Cybersecurity",
     description:
-      "Multi-stage red-team engagement for a regional fintech, moving from phishing to AD privilege escalation and domain admin.",
-    meta: "2025 · CONFIDENTIAL",
+      "Earned the CC certification, covering core security concepts across security operations, network defense, access control, and risk awareness.",
+    meta: "CERTIFIED · CC",
   },
   {
     number: "002",
-    title: "Glasshouse",
+    title: "NCSA Thailand",
+    titleItalic: "Cyber Top Talent 2025",
     description:
-      "LLM agent harness research showing how a vendor PDF could trigger indirect prompt injection and expose tool-call data.",
-    meta: "2025 · RESEARCH",
+      "Competed in NCSA Thailand Cyber Top Talent 2025, building hands-on problem solving through timed cybersecurity challenges and team-based pressure.",
+    meta: "2025 · COMPETITION",
   },
   {
     number: "003",
-    title: "Pale",
-    titleItalic: "Cumulus",
+    title: "NCSA",
+    titleItalic: "Boot Camp",
     description:
-      "Cloud privilege-escalation chain across IAM, SSM, and a misconfigured KMS grant, with coordinated disclosures filed.",
-    meta: "2024 · DISCLOSED",
+      "Completed intensive training focused on security fundamentals, offensive thinking, and disciplined hands-on practice across technical exercises.",
+    meta: "BOOTCAMP · TRAINING",
   },
   {
     number: "004",
-    title: "Quiet",
-    titleItalic: "Hours",
+    title: "CTFTime",
+    titleItalic: "Competitions",
     description:
-      "Internal CTF and adversary-simulation training program for a 600-person engineering organization.",
-    meta: "2024 · ONGOING",
+      "Regularly compete in CTF events to strengthen web exploitation, enumeration, scripting, and structured attack-chain thinking under time pressure.",
+    meta: "ONGOING · CTF",
   },
   {
     number: "005",
-    title: "Field",
-    titleItalic: "Notes",
+    title: "Hack The Box,",
+    titleItalic: "TryHackMe, picoCTF, PortSwigger",
     description:
-      "Public writeups on jailbreak taxonomy, RAG red-team evaluation, and small Python security tooling.",
-    meta: "ONGOING · OPEN-SOURCE",
+      "Use labs and practice platforms to sharpen web security fundamentals, exploitation workflow, and a repeatable testing methodology.",
+    meta: "LABS · HANDS-ON",
   },
 ];
 
-export const contactLines = ["Bring me in before", "<em>the real attack.</em>"];
+export const contactLines = ["Open to", "<em>security work and collaboration.</em>"];
 
 export const contactLinks: ContactLink[] = [
   {
