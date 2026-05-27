@@ -5,6 +5,8 @@ import HeroClip from "../components/HeroClip";
 import SlideUpClip from "../components/SlideUpClip";
 import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
 import ImageReveal from "../components/ImageReveal";
+import PyramidFlip from "../components/PyramidFlip";
+import RoleSlide from "../components/RoleSlide";
 import {
   aboutLines,
   aboutStats,
@@ -51,47 +53,8 @@ import {
   </div>
 
   <!-- ABOUT -->
-  <section id="about" class="content">
-    <div class="wrap">
-      <RiseIn client:load distance={30}>
-        <div class="eyebrow">01 — Who</div>
-      </RiseIn>
-
-      <LineReveal
-        client:load
-        class="big-statement"
-        lines={aboutLines}
-      />
-
-      <div class="about-grid">
-        <RiseIn client:load distance={60} delay={0.05}>
-          <div class="glass-liquid about-card">
-            <p class="lead about-lead">
-              I help teams understand how their systems behave under pressure,
-              from identity paths to LLM agents and the tooling around them.
-            </p>
-            <p class="body about-body">
-              I'm Thanarak Kanyaprasit, an offensive security researcher focused on
-              red-team operations, AI security, cloud escalation, and practical
-              security research. This portfolio collects selected engagements,
-              experiments, tools, and notes that show how I think through attack paths.
-            </p>
-          </div>
-        </RiseIn>
-
-        <div class="about-side">
-          {aboutStats.map((stat, index) => (
-            <RiseIn client:load distance={60} delay={0.1 + index * 0.08}>
-              <div class="glass-liquid stat">
-                <span class="k">{stat.value}</span>
-                <span class="l">{stat.label}</span>
-              </div>
-            </RiseIn>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
+  <PyramidFlip client:load />
+  <RoleSlide client:load />
 
   <!-- INTERLUDE 1 -->
   <div id="interlude-1">

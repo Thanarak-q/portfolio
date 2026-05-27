@@ -42,18 +42,9 @@ export const navLinks: NavLink[] = [
   { href: "#work", label: "Work" },
 ];
 
-export const aboutLines = [
-  "I break systems",
-  "<em>before they break you.</em>",
-  "Then I turn the findings",
-  "into clearer defenses.",
-];
+export const aboutLines: string[] = [];
 
-export const aboutStats: StatItem[] = [
-  { value: "04", label: "Years in adversary simulation" },
-  { value: "37", label: "CVEs and disclosures" },
-  { value: "AI", label: "Agent and LLM security focus" },
-];
+export const aboutStats: StatItem[] = [];
 
 export const focusItems: FocusItem[] = [
   {
@@ -108,28 +99,24 @@ export const focusItems: FocusItem[] = [
 
 export const booksRead: BookNote[] = [
   {
-    title: "The Art of Memory — Frances Yates",
-    note: "Memory is infrastructure. I use it to connect signals.",
+    title: "The Hacker Playbook 3: Practical Guide to Penetration Testing",
+    note: "The real deal. Phishing, AV bypass, payload recompilation—techniques that work.",
   },
   {
-    title: "Ways of Seeing — John Berger",
-    note: "The frame changes what you notice, and what you miss.",
+    title: "Bug Bounty Bootcamp",
+    note: "Well-written and methodical. Teaches technique and mindset together.",
   },
   {
-    title: "Thinking in Systems — Donella Meadows",
-    note: "Good security work starts with the system, not the symptom.",
+    title: "The Web Application Hacker's Handbook: Finding and Exploiting Security Flaws 2ed",
+    note: "Still the Bible of web app security. Required reading for anyone serious.",
   },
   {
-    title: "The Cuckoo's Egg — Clifford Stoll",
-    note: "A reminder that patient notes still beat noisy dashboards.",
+    title: "Web Hacking 101",
+    note: "Clear, innovative, hard to put down. Real case studies, real impact.",
   },
   {
-    title: "In Praise of Shadows — Jun'ichirō Tanizaki",
-    note: "Some details only show up when the room gets quieter.",
-  },
-  {
-    title: "The Phoenix Project — Gene Kim",
-    note: "Security work lands better when it respects how teams ship.",
+    title: "AI Red Teaming",
+    note: "How data gets in, how models train, how outputs trigger consequences. Full kill chain.",
   },
 ];
 
