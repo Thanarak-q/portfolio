@@ -816,8 +816,48 @@ p.lead {
     gap: 0.28em;
 }
 
+.rs-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28em;
+    will-change: transform, opacity;
+}
+
 .rs-word {
     font-style: italic;
+}
+
+.rs-flair {
+    position: relative;
+    display: inline-block;
+    color: var(--leak-deep);
+}
+
+.rs-flair-line {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    bottom: -0.18em;
+    width: 104%;
+    height: 0.28em;
+    color: var(--leak-deep);
+    overflow: visible;
+    pointer-events: none;
+}
+
+.rs-star {
+    display: inline-block;
+    font-style: normal;
+    color: var(--leak-deep);
+    margin-left: 0.05em;
+    font-size: 0.7em;
+    animation: rs-spin 6s linear infinite;
+    transform-origin: center 55%;
+}
+
+@keyframes rs-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
 }
 
 .rs-sep {
@@ -843,6 +883,7 @@ p.lead {
     vertical-align: middle;
     position: relative;
     top: -0.05em;
+    will-change: transform, opacity, filter;
 }
 
 .rs-badge--accent {
