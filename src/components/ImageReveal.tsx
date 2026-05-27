@@ -13,8 +13,8 @@ interface ImageRevealProps {
   name: string;
   eyebrow?: string;
   duration?: string;
-  type: string;
-  year: string;
+  type?: string;
+  year?: string;
   src: string;
   alt: string;
 }
@@ -24,9 +24,6 @@ export default function ImageReveal({
   total,
   name,
   eyebrow = "Focus",
-  duration,
-  type,
-  year,
   src,
   alt,
 }: ImageRevealProps) {
@@ -81,11 +78,6 @@ export default function ImageReveal({
 
       <div ref={imageRef} className="ir-image">
         <img src={src} alt={alt} loading="lazy" decoding="async" />
-      </div>
-
-      <div className="ir-meta-bottom wrap">
-        <span className="ir-type">{type}</span>
-        <span className="ir-year">{year}</span>
       </div>
     </section>
   );

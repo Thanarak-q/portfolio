@@ -10,9 +10,6 @@ export interface StatItem {
 
 export interface FocusItem {
   name: string;
-  type: string;
-  year: string;
-  duration: string;
   src: string;
   alt: string;
 }
@@ -54,43 +51,28 @@ export const aboutStats: StatItem[] = [];
 export const focusItems: FocusItem[] = [
   {
     name: "Red Team",
-    type: "Adversary emulation",
-    year: "2025",
-    duration: "17 – 25′",
     src: "/assets/chair.png",
     alt: "Empty chair, low light",
   },
   {
     name: "AI Security",
-    type: "Prompt & agent research",
-    year: "2025",
-    duration: "12 – 18′",
     src: "/assets/flower.png",
     alt: "Single flower, close crop",
   },
   {
+    name: "Threat Intel",
+    src: "/assets/moutainandbird.png",
+    alt: "Mountain ridge with bird",
+  },
+  {
     name: "Field Notes",
-    type: "Writeups & research notes",
-    year: "Ongoing",
-    duration: "06 – 10′",
     src: "/assets/bird.png",
     alt: "Bird in flight",
   },
   {
     name: "Custom Tooling",
-    type: "Harnesses & internal tools",
-    year: "2024",
-    duration: "14 – 22′",
     src: "/assets/flowerandbird.png",
     alt: "Flower with bird",
-  },
-  {
-    name: "Threat Intel",
-    type: "TTP mapping",
-    year: "2024",
-    duration: "09 – 15′",
-    src: "/assets/moutainandbird.png",
-    alt: "Mountain ridge with bird",
   },
 ];
 

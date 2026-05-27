@@ -1124,7 +1124,7 @@ p.lead {
 
 .focus-loop-title {
     margin: 18px 0 0;
-    max-width: 7ch;
+    max-width: none;
     font-family: "Instrument Serif", serif;
     font-size: clamp(58px, 6vw, 92px);
     font-weight: 400;
@@ -1135,15 +1135,21 @@ p.lead {
 
 .focus-loop-title-row {
     display: block;
-    overflow: hidden;
-    padding-bottom: 0.04em;
-    margin-bottom: -0.04em;
+    padding: 0.08em 0.12em;
+    margin: -0.08em -0.12em;
+    clip-path: inset(0.08em -0.12em);
 }
 
 .focus-loop-title-row > span,
 .focus-loop-title-row > em {
     display: block;
     will-change: transform, opacity;
+}
+
+.focus-char {
+    display: inline-block;
+    will-change: transform, opacity;
+    white-space: pre;
 }
 
 .focus-loop-title em {
@@ -1305,7 +1311,7 @@ p.lead {
     }
 
     .focus-loop-title {
-        max-width: 7ch;
+        max-width: none;
         font-size: clamp(46px, 12vw, 60px);
     }
 
