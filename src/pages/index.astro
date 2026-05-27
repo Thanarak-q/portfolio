@@ -95,9 +95,6 @@ import {
         index={i + 1}
         total={focusItems.length}
         name={item.name}
-        duration={item.duration}
-        type={item.type}
-        year={item.year}
         src={item.src}
         alt={item.alt}
       />
@@ -283,76 +280,73 @@ import {
     ) {
       const focusIntroCopy = focusIntro.querySelector<HTMLElement>(".focus-loop-copy");
 
-      gsap.timeline({
-        scrollTrigger: {
-          trigger: focusIntro,
-          start: "top 78%",
-          once: true,
-        },
-      })
-      .fromTo(
-        focusIntroItems,
-        {
-          y: 36,
-          opacity: 0,
-          filter: "blur(10px)",
-        },
-        {
-          y: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          duration: 0.9,
-          stagger: 0.14,
-          ease: "power3.out",
+      const splitToChars = (el: HTMLElement) => {
+        const text = el.textContent ?? "";
+        el.textContent = "";
+        const chars: HTMLSpanElement[] = [];
+        for (const ch of text) {
+          const span = document.createElement("span");
+          span.className = "focus-char";
+          if (ch === " ") {
+            span.innerHTML = "&nbsp;";
+          } else {
+            span.textContent = ch;
+          }
+          el.appendChild(span);
+          chars.push(span);
         }
-      )
-      .fromTo(
-        focusIntroLines[0],
-        {
-          yPercent: 125,
-          xPercent: -16,
-          rotate: 4,
-          opacity: 0,
+        return chars;
+      };
+
+      const lineChars: HTMLSpanElement[][] = focusIntroLines.map(splitToChars);
+      const allChars = lineChars.flat();
+
+      gsap.set(focusIntroItems, { y: 24, opacity: 0, filter: "blur(8px)" });
+      gsap.set(allChars, { yPercent: 120, opacity: 0, rotate: 6, transformOrigin: "0% 100%" });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: focusIntroCopy ?? focusIntro,
+          start: "top 80%",
+          toggleActions: "play reverse play reverse",
         },
-        {
-          yPercent: 0,
-          xPercent: 0,
-          rotate: 0,
-          opacity: 1,
-          duration: 1.05,
-          ease: "power4.out",
-        },
-        0.02
-      )
-      .fromTo(
-        focusIntroLines[1],
-        {
-          yPercent: 135,
-          xPercent: 12,
-          rotate: -5,
-          opacity: 0,
-        },
-        {
-          yPercent: 0,
-          xPercent: 0,
-          rotate: 0,
-          opacity: 1,
-          duration: 1.1,
-          ease: "power4.out",
-        },
-        0.14
-      )
-      .fromTo(
+      });
+
+      tl.to(focusIntroItems, {
+        y: 0,
+        opacity: 1,
+        filter: "blur(0px)",
+        duration: 0.7,
+        stagger: 0.12,
+        ease: "power3.out",
+      });
+
+      lineChars.forEach((chars, lineIndex) => {
+        tl.to(
+          chars,
+          {
+            yPercent: 0,
+            opacity: 1,
+            rotate: 0,
+            duration: 0.85,
+            ease: "expo.out",
+            stagger: {
+              each: 0.022,
+              from: lineIndex === 1 ? "random" : "start",
+            },
+          },
+          lineIndex === 0 ? 0.05 : 0.32
+        );
+      });
+
+      tl.to(
         focusIntro,
-        {
-          "--focus-rule-scale": 0.2,
-        },
         {
           "--focus-rule-scale": 1,
           duration: 0.9,
           ease: "power3.out",
         },
-        0.08
+        0.1
       );
 
       if (focusIntroCopy) {
