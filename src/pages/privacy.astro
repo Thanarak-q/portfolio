@@ -8,57 +8,58 @@ import Base from "../layouts/Base.astro";
       <header>
         <p class="eyebrow">Legal</p>
         <h1>Privacy Policy</h1>
-        <p class="updated">Last updated: May 26, 2026</p>
+        <p class="updated">Last updated: May 27, 2026</p>
       </header>
 
       <section>
         <h2>1. Overview</h2>
         <p>
-          This Privacy Policy describes how this application ("we", "our", or
-          "the App") collects, uses, and protects information when you use it.
-          By using the App, you agree to the practices described below.
+          This page exists for platform compliance for connected apps and
+          experimental tools operated by Thanarak Kanyaprasit. It describes the
+          limited data handling used to support authentication, account access,
+          and basic service operation.
         </p>
       </section>
 
       <section>
         <h2>2. Information We Collect</h2>
-        <p>When you authenticate via Facebook Login, we may receive:</p>
+        <p>Depending on the app and permissions you approve, we may receive:</p>
         <ul>
-          <li>Your public profile (name, profile picture, Facebook ID)</li>
-          <li>Email address (only if you grant permission)</li>
-          <li>Any additional data scopes you explicitly approve</li>
+          <li>Basic profile identifiers needed to sign you in</li>
+          <li>Email address, only when you explicitly grant that permission</li>
+          <li>Minimal account metadata needed to keep the app functioning</li>
         </ul>
         <p>
-          We do not collect sensitive personal information beyond what is
-          necessary to operate the App.
+          We do not intentionally collect sensitive personal information beyond
+          what is required for the specific app feature you use.
         </p>
       </section>
 
       <section>
         <h2>3. How We Use Information</h2>
         <ul>
-          <li>To authenticate and identify you within the App</li>
-          <li>To personalize your experience</li>
-          <li>To improve and maintain the App</li>
-          <li>To communicate important updates if you opt in</li>
+          <li>To authenticate your account and keep you signed in</li>
+          <li>To operate the requested feature or connected workflow</li>
+          <li>To maintain reliability, diagnose failures, and prevent abuse</li>
+          <li>To respond to support or deletion requests you send directly</li>
         </ul>
       </section>
 
       <section>
         <h2>4. Sharing of Information</h2>
         <p>
-          We do not sell, rent, or trade your personal information. We may share
-          limited data with trusted service providers strictly to operate the
-          App, or when required by law.
+          We do not sell personal information. Data may be processed by hosting,
+          analytics, or infrastructure providers only when needed to operate the
+          app, or disclosed when required by law.
         </p>
       </section>
 
       <section>
         <h2>5. Data Retention</h2>
         <p>
-          We retain your information only as long as your account is active or
-          as needed to provide the service. You may request deletion at any
-          time.
+          We retain data only for as long as it is needed to operate the app,
+          meet legal obligations, resolve disputes, or enforce security and
+          abuse protections. You may request deletion at any time.
         </p>
       </section>
 
@@ -67,7 +68,7 @@ import Base from "../layouts/Base.astro";
         <ul>
           <li>Request access to data we hold about you</li>
           <li>Request correction or deletion of your data</li>
-          <li>Revoke Facebook permissions from your Facebook settings</li>
+          <li>Revoke third-party app permissions from the relevant provider settings</li>
         </ul>
       </section>
 
@@ -75,7 +76,7 @@ import Base from "../layouts/Base.astro";
         <h2>7. Data Deletion</h2>
         <p>
           To request deletion of your data, email
-          <a href="mailto:kin491512@gmail.com">kin491512@gmail.com</a>
+          <a href="mailto:thanarak.work@gmail.com">thanarak.work@gmail.com</a>
           with the subject "Data Deletion Request". We will process the request
           within 30 days.
         </p>
@@ -93,8 +94,8 @@ import Base from "../layouts/Base.astro";
       <section>
         <h2>9. Children's Privacy</h2>
         <p>
-          The App is not intended for users under 13. We do not knowingly
-          collect data from children under 13.
+          These apps are not intended for children under 13. We do not
+          knowingly collect personal data from children under 13.
         </p>
       </section>
 
@@ -110,7 +111,7 @@ import Base from "../layouts/Base.astro";
         <h2>11. Contact</h2>
         <p>
           For any questions about this Privacy Policy, contact:<br />
-          <a href="mailto:kin491512@gmail.com">kin491512@gmail.com</a>
+          <a href="mailto:thanarak.work@gmail.com">thanarak.work@gmail.com</a>
         </p>
       </section>
 
@@ -125,8 +126,10 @@ import Base from "../layouts/Base.astro";
   .legal {
     min-height: 100vh;
     padding: clamp(4rem, 8vw, 8rem) clamp(1.25rem, 5vw, 3rem);
-    color: var(--ink, #f4f1ea);
-    background: var(--bg, #0d0c0a);
+    color: #f4efe7;
+    background:
+      radial-gradient(circle at top, rgba(214, 90, 58, 0.18), transparent 32%),
+      linear-gradient(180deg, #100d0b 0%, #181411 100%);
   }
 
   .legal-inner {
@@ -158,7 +161,7 @@ import Base from "../layouts/Base.astro";
   .updated {
     font-family: "JetBrains Mono", monospace;
     font-size: 0.8rem;
-    opacity: 0.5;
+    opacity: 0.68;
     margin: 0 0 3.5rem;
   }
 
@@ -173,7 +176,7 @@ import Base from "../layouts/Base.astro";
   p,
   ul {
     margin: 0 0 1rem;
-    opacity: 0.82;
+    opacity: 0.9;
   }
 
   ul {
@@ -187,7 +190,7 @@ import Base from "../layouts/Base.astro";
   a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-decoration-color: rgba(244, 239, 231, 0.45);
     text-underline-offset: 3px;
     transition: text-decoration-color 200ms ease;
   }
@@ -199,7 +202,7 @@ import Base from "../layouts/Base.astro";
   .legal-foot {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(244, 239, 231, 0.12);
     font-family: "JetBrains Mono", monospace;
     font-size: 0.85rem;
   }

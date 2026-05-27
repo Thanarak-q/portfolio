@@ -50,7 +50,7 @@ export default function BookShelf({ books }: Props) {
         <article
           key={active}
           className={`shelf-cover shelf-cover--${book.palette}`}
-          aria-live="polite"
+          aria-live={paused ? "polite" : "off"}
         >
           <div className="cover-frame">
             <div className="cover-top">

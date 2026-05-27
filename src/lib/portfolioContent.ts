@@ -104,15 +104,6 @@ export const focusItems: FocusItem[] = [
 
 export const booksRead: BookNote[] = [
   {
-    title: "The Hacker Playbook 3: Practical Guide to Penetration Testing",
-    shortTitle: "Hacker Playbook 3",
-    subtitle: "Practical Guide to Penetration Testing",
-    tag: "Red team · field manual",
-    note: "Made the difference between pentest and red team click. Pentest hunts as many bugs as possible inside a scope; red team picks an objective and chains everything — phishing, evasion, lateral movement, persistence — and you're also testing whether the defenders ever notice. The goal isn't a bug list, it's the story of an attack.",
-    palette: "ink",
-    spineWidth: "lg",
-  },
-  {
     title: "Bug Bounty Bootcamp by Vickie Li",
     shortTitle: "Bug Bounty Bootcamp",
     subtitle: "The Guide to Finding and Reporting Web Vulnerabilities",
@@ -147,6 +138,15 @@ export const booksRead: BookNote[] = [
     note: "Still reading. Already changing how I think about prompt injection — it's just the visible end of a much bigger surface that runs through data, training, and the agent loop.",
     palette: "rose",
     spineWidth: "md",
+  },
+  {
+    title: "The Hacker Playbook 3: Practical Guide to Penetration Testing",
+    shortTitle: "Hacker Playbook 3",
+    subtitle: "Practical Guide to Penetration Testing",
+    tag: "Red team · field manual",
+    note: "Made the difference between pentest and red team click. Pentest hunts as many bugs as possible inside a scope; red team picks an objective and chains everything — phishing, evasion, lateral movement, persistence — and you're also testing whether the defenders ever notice. The goal isn't a bug list, it's the story of an attack.",
+    palette: "ink",
+    spineWidth: "lg",
   },
 ];
 
