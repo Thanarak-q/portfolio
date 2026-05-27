@@ -1091,6 +1091,81 @@ p.lead {
     z-index: 2;
 }
 
+.focus-loop-intro {
+    --focus-rule-scale: 0;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 150px;
+    padding-bottom: 18vh;
+    position: relative;
+}
+
+.focus-loop-copy {
+    max-width: 560px;
+    position: relative;
+    text-align: center;
+}
+
+.focus-loop-copy::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -52px;
+    width: 120px;
+    height: 1px;
+    background: rgba(20, 10, 5, 0.18);
+    translate: -50% 0;
+    transform: scaleX(var(--focus-rule-scale));
+    transform-origin: center center;
+}
+
+.focus-loop-title {
+    margin: 18px 0 0;
+    max-width: 7ch;
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(58px, 6vw, 92px);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+}
+
+.focus-loop-title-row {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.04em;
+    margin-bottom: -0.04em;
+}
+
+.focus-loop-title-row > span,
+.focus-loop-title-row > em {
+    display: block;
+    will-change: transform, opacity;
+}
+
+.focus-loop-title em {
+    display: block;
+    font-style: italic;
+    color: var(--leak-deep);
+}
+
+.focus-loop-caption {
+    margin: 24px 0 0;
+    max-width: 28ch;
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+}
+
+.focus-loop-intro + .image-reveal-static {
+    padding-top: 340px;
+}
+
 .image-reveal-static {
     position: relative;
     padding: 120px 0 80px;
@@ -1128,7 +1203,6 @@ p.lead {
     display: flex;
     justify-content: center;
     align-items: baseline;
-    gap: clamp(20px, 4vw, 80px);
     font-family: "Instrument Serif", serif;
     font-weight: 400;
     font-size: clamp(72px, 12vw, 220px);
@@ -1137,10 +1211,6 @@ p.lead {
     color: var(--ink);
     text-align: center;
     padding: 0 24px;
-}
-
-.ir-bracket {
-    font-weight: 300;
 }
 
 .ir-name {
@@ -1227,26 +1297,43 @@ p.lead {
         gap: 24px;
         overflow: hidden;
     }
+
+    .focus-loop-intro {
+        min-height: 88vh;
+        padding-top: 112px;
+        padding-bottom: 96px;
+    }
+
+    .focus-loop-title {
+        max-width: 7ch;
+        font-size: clamp(46px, 12vw, 60px);
+    }
+
+    .focus-loop-caption {
+        margin-top: 18px;
+        max-width: 22ch;
+        font-size: clamp(17px, 4.8vw, 21px);
+    }
+
+    .focus-loop-intro + .image-reveal-static {
+        padding-top: 220px;
+    }
+
     .image-reveal-static + .image-reveal-static {
         padding-top: 34px;
     }
 
     .ir-meta-top {
-        display: grid;
-        grid-template-columns: 1fr auto;
-        row-gap: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
         font-size: 9.5px;
         letter-spacing: 0.16em;
-    }
-
-    .ir-duration {
-        grid-column: 1 / -1;
     }
 
     .ir-title {
         font-size: clamp(42px, 12.5vw, 62px);
         line-height: 0.94;
-        gap: 8px;
         padding: 0 18px;
     }
     .ir-image {

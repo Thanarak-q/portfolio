@@ -92,14 +92,6 @@ export const focusItems: FocusItem[] = [
     src: "/assets/moutainandbird.png",
     alt: "Mountain ridge with bird",
   },
-  {
-    name: "Visual Archive",
-    type: "Photography & field memory",
-    year: "Ongoing",
-    duration: "—",
-    src: "/assets/moutainandocean.png",
-    alt: "Mountain meeting the ocean at dawn",
-  },
 ];
 
 export const booksRead: BookNote[] = [

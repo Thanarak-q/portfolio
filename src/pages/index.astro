@@ -63,15 +63,32 @@ import {
     client:load
     src="/assets/clip-2-scrub.mp4"
     eyebrow="Interlude — 00:06 / 00:18"
-    title="Offense starts"
-    titleItalic="with observation."
-    caption="I map assumptions, access paths, and human workflows before touching the first exploit."
+    title="Start with"
+    titleItalic="the basics."
+    caption="Good security work starts with careful observation, clear notes, and understanding how the system actually behaves."
     runwayVH={400}
     exitDirection="left"
   />
   </div>
 
   <section id="focus" class="focus-loop">
+    <div class="focus-loop-intro wrap" data-focus-intro>
+      <div class="focus-loop-copy">
+        <div class="eyebrow" data-focus-intro-item>02 — Focus</div>
+        <h2 class="focus-loop-title">
+          <span class="focus-loop-title-row">
+            <span data-focus-intro-line>What I'm</span>
+          </span>
+          <span class="focus-loop-title-row focus-loop-title-row--accent">
+            <em data-focus-intro-line>practicing now.</em>
+          </span>
+        </h2>
+        <p class="focus-loop-caption" data-focus-intro-item>
+          Web security, red-team basics, AI security, and practical lab work.
+        </p>
+      </div>
+    </div>
+
     {focusItems.map((item, i) => (
       <ImageReveal
         client:load
@@ -95,9 +112,9 @@ import {
     client:load
     src="/assets/clip-3-scrub.mp4"
     eyebrow="Interlude — 00:12 / 00:18"
-    title="Good findings"
-    titleItalic="become better systems."
-    caption="The point is not just impact. It is a clear path from evidence to remediation."
+    title="Learn, test,"
+    titleItalic="improve."
+    caption="Each lab, challenge, and write-up adds a little more clarity to how systems break and how they can be made safer."
     runwayVH={400}
   />
   </div>
@@ -184,6 +201,11 @@ import {
   </section>
 
   <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
     const contactVideo = document.querySelector<HTMLVideoElement>("[data-contact-video]");
     const contactSection = document.getElementById("contact");
     const navLinks = Array.from(
@@ -248,6 +270,106 @@ import {
     updateActiveSection();
     window.addEventListener("scroll", updateActiveSection, { passive: true });
     window.addEventListener("resize", updateActiveSection);
+
+    const focusIntro = document.querySelector<HTMLElement>("[data-focus-intro]");
+    const focusIntroItems = gsap.utils.toArray<HTMLElement>("[data-focus-intro-item]");
+    const focusIntroLines = gsap.utils.toArray<HTMLElement>("[data-focus-intro-line]");
+
+    if (
+      focusIntro &&
+      focusIntroItems.length &&
+      focusIntroLines.length &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      const focusIntroCopy = focusIntro.querySelector<HTMLElement>(".focus-loop-copy");
+
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: focusIntro,
+          start: "top 78%",
+          once: true,
+        },
+      })
+      .fromTo(
+        focusIntroItems,
+        {
+          y: 36,
+          opacity: 0,
+          filter: "blur(10px)",
+        },
+        {
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 0.9,
+          stagger: 0.14,
+          ease: "power3.out",
+        }
+      )
+      .fromTo(
+        focusIntroLines[0],
+        {
+          yPercent: 125,
+          xPercent: -16,
+          rotate: 4,
+          opacity: 0,
+        },
+        {
+          yPercent: 0,
+          xPercent: 0,
+          rotate: 0,
+          opacity: 1,
+          duration: 1.05,
+          ease: "power4.out",
+        },
+        0.02
+      )
+      .fromTo(
+        focusIntroLines[1],
+        {
+          yPercent: 135,
+          xPercent: 12,
+          rotate: -5,
+          opacity: 0,
+        },
+        {
+          yPercent: 0,
+          xPercent: 0,
+          rotate: 0,
+          opacity: 1,
+          duration: 1.1,
+          ease: "power4.out",
+        },
+        0.14
+      )
+      .fromTo(
+        focusIntro,
+        {
+          "--focus-rule-scale": 0.2,
+        },
+        {
+          "--focus-rule-scale": 1,
+          duration: 0.9,
+          ease: "power3.out",
+        },
+        0.08
+      );
+
+      if (focusIntroCopy) {
+        gsap.to(focusIntroCopy, {
+          yPercent: -22,
+          opacity: 0.12,
+          scale: 0.9,
+          ease: "none",
+          scrollTrigger: {
+            trigger: focusIntro,
+            start: "center center",
+            end: "bottom top",
+            scrub: 0.9,
+          },
+        });
+      }
+    }
 
     if (contactVideo && contactSection) {
       const playContactVideo = () => {
