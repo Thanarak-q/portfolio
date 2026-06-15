@@ -1,0 +1,133 @@
+---
+import Base from "../layouts/Base.astro";
+import CurriculumChecker from "../components/CurriculumChecker";
+import "../styles/curriculum.css";
+---
+
+<Base title="เช็คหน่วยกิต — CS CMU 2564 (g64plus)">
+  <nav class="nav glass-liquid" aria-label="Primary">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="brand-name">thanarak</span>
+      <span class="role-mini">/ red&nbsp;team</span>
+    </div>
+    <div class="nav-links">
+      <a href="/#about">About</a>
+      <a href="/#focus">Focus</a>
+      <a href="/#work">Work</a>
+      <a href="/curriculum-checker/" class="active">Checker</a>
+    </div>
+    <a class="nav-cta" href="/#contact">Contact</a>
+  </nav>
+  <main class="cc-page">
+    <header class="cc-page-head">
+      <p class="cc-eyebrow mono">CMU · วิทยาการคอมพิวเตอร์ · หลักสูตร 2564</p>
+      <h1 class="serif cc-title">
+        เช็คว่า<em>ต้องเรียนอะไรอีกบ้าง</em><br />กว่าจะจบ
+      </h1>
+      <p class="cc-sub">
+        เลือกแผนการเรียน วางผลการเรียนของคุณ แล้วระบบจะแมปแต่ละวิชาเข้าหมวด
+        คำนวณหน่วยกิตที่เหลือ และบอกชัด ๆ ว่ายังขาดวิชาแกน / วิชาเอก /
+        วิชาเลือกตัวไหนบ้าง
+      </p>
+    </header>
+
+    <CurriculumChecker client:idle />
+
+    <footer class="cc-page-foot">
+      <p class="cc-hint">
+        ข้อมูลหลักสูตรอ้างอิงจากเว็บหลักสูตร g64plus ของภาควิชาวิทยาการคอมพิวเตอร์
+        มช. ใช้เพื่อประเมินเบื้องต้น — โปรดยืนยันกับอาจารย์ที่ปรึกษา/สำนักทะเบียน
+        ก่อนตัดสินใจลงทะเบียนจริง
+      </p>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  .cc-page {
+    min-height: 100vh;
+    padding: clamp(14px, 3vw, 32px) 0 60px;
+    position: relative;
+    z-index: 201;
+  }
+  .cc-page-head {
+    width: min(1040px, 92vw);
+    margin: 0 auto clamp(14px, 3vw, 28px);
+    padding-top: 70px;
+  }
+  .cc-back {
+    display: inline-block;
+    font-size: 0.84rem;
+    color: var(--ink-mute);
+    text-decoration: none;
+    margin-bottom: 12px;
+    transition: color 0.18s ease;
+    opacity: 0.75;
+  }
+  .cc-back:hover {
+    color: var(--leak-deep);
+    opacity: 1;
+  }
+  .cc-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--leak-deep);
+    margin: 0 0 8px;
+    opacity: 0.85;
+  }
+  .cc-title {
+    font-size: clamp(1.6rem, 1rem + 2.8vw, 3rem);
+    line-height: 1.05;
+    margin: 0 0 10px;
+    font-weight: 400;
+  }
+  .cc-title em {
+    font-style: italic;
+    color: var(--leak-deep);
+  }
+  .cc-sub {
+    font-size: clamp(0.88rem, 0.8rem + 0.25vw, 1rem);
+    color: var(--ink-soft);
+    line-height: 1.55;
+    max-width: 60ch;
+    margin: 0;
+    opacity: 0.85;
+  }
+  .cc-page-foot {
+    width: min(1040px, 92vw);
+    margin: 32px auto 0;
+    color: rgba(255, 255, 255, 0.65);
+    opacity: 1;
+    font-size: 0.78rem;
+  }
+  /* Mobile nav */
+  @media (max-width: 680px) {
+    .nav {
+      max-width: calc(100vw - 16px);
+      padding: 5px;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+    .nav .brand {
+      padding: 0 8px;
+      font-size: 13px;
+    }
+    .nav .role-mini {
+      display: none;
+    }
+    .nav-links {
+      gap: 2px;
+    }
+    .nav-links a {
+      font-size: 0.72rem;
+      padding: 4px 8px;
+    }
+    .nav-cta {
+      font-size: 0.72rem;
+      padding: 4px 10px;
+    }
+  }
+</style>
