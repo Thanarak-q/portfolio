@@ -124,7 +124,7 @@ export const booksRead: BookNote[] = [
   },
 ];
 
-export const workLines = ["Experience built through", "<em>real security work.</em>"];
+export const workLines = ["Experience across", "<em>building and securing software.</em>"];
 
 export const workItems: WorkItem[] = [
   {
@@ -143,9 +143,17 @@ export const workItems: WorkItem[] = [
       "Designed a microservices architecture for an AI-powered math learning platform — RAG question answering with hybrid retrieval, vector search, and reranking (LangChain, Pinecone, OpenAI), async AI workflows over RabbitMQ workers, and a full observability stack (PostgreSQL, Redis, MinIO, Docker Compose, Caddy, Prometheus, Grafana, Loki).",
     meta: "2025 · SmartMath",
   },
+  {
+    number: "003",
+    title: "Scrum Master & Full-Stack Developer",
+    titleItalic: "Village Security Platform",
+    description:
+      "Led sprint planning and delivery as Scrum Master while building the platform: role management and access control across backend routes and dashboards, pending-user approval and house management, visitor in/out workflows for security guards, and real-time WebSocket notifications (Next.js, Bun/Elysia).",
+    meta: "2025 · Village Security",
+  },
 ];
 
-export const contactLines = ["Open to", "<em>security work and collaboration.</em>"];
+export const contactLines = ["Open to", "<em>product security work.</em>"];
 
 export const contactLinks: ContactLink[] = [
   {

@@ -1,8 +1,12 @@
 ---
 interface Props {
   title?: string;
+  description?: string;
 }
-const { title = "Thanarak Kanyaprasit — Portfolio" } = Astro.props;
+const {
+  title = "Thanarak Kanyaprasit — Product Security & Penetration Testing",
+  description = "Final-year Computer Science student at Chiang Mai University working in product security and penetration testing — securing applications across the development lifecycle.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -14,6 +18,10 @@ const { title = "Thanarak Kanyaprasit — Portfolio" } = Astro.props;
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
