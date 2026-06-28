@@ -50,7 +50,7 @@ export const aboutStats: StatItem[] = [];
 
 export const focusItems: FocusItem[] = [
   {
-    name: "Red Team",
+    name: "Web Pentest",
     src: "/assets/chair.png",
     alt: "Empty chair, low light",
   },
@@ -124,48 +124,24 @@ export const booksRead: BookNote[] = [
   },
 ];
 
-export const workLines = ["Experience built through", "<em>competition and labs.</em>"];
+export const workLines = ["Experience built through", "<em>real security work.</em>"];
 
 export const workItems: WorkItem[] = [
   {
     number: "001",
-    title: "Certified in",
-    titleItalic: "Cybersecurity",
+    title: "Cyber Security Engineer",
+    titleItalic: "ITSC, Chiang Mai University",
     description:
-      "Earned the CC certification, covering core security concepts across security operations, network defense, access control, and risk awareness.",
-    meta: "CERTIFIED · CC",
+      "Cooperative education at the IT Service Center: conduct web application penetration testing, build threat-intelligence software for security monitoring and analysis, and report vulnerabilities while supporting remediation with the security team.",
+    meta: "2026 · ITSC / CMU",
   },
   {
     number: "002",
-    title: "NCSA Thailand",
-    titleItalic: "Cyber Top Talent 2025",
+    title: "AI Engineer & System Architect",
+    titleItalic: "SmartMath",
     description:
-      "Competed in NCSA Thailand Cyber Top Talent 2025, building hands-on problem solving through timed cybersecurity challenges and team-based pressure.",
-    meta: "2025 · COMPETITION",
-  },
-  {
-    number: "003",
-    title: "NCSA",
-    titleItalic: "Boot Camp",
-    description:
-      "Completed intensive training focused on security fundamentals, offensive thinking, and disciplined hands-on practice across technical exercises.",
-    meta: "BOOTCAMP · TRAINING",
-  },
-  {
-    number: "004",
-    title: "CTFTime",
-    titleItalic: "Competitions",
-    description:
-      "Regularly compete in CTF events to strengthen web exploitation, enumeration, scripting, and structured attack-chain thinking under time pressure.",
-    meta: "ONGOING · CTF",
-  },
-  {
-    number: "005",
-    title: "Hack The Box,",
-    titleItalic: "TryHackMe, picoCTF, PortSwigger",
-    description:
-      "Use labs and practice platforms to sharpen web security fundamentals, exploitation workflow, and a repeatable testing methodology.",
-    meta: "LABS · HANDS-ON",
+      "Designed a microservices architecture for an AI-powered math learning platform — RAG question answering with hybrid retrieval, vector search, and reranking (LangChain, Pinecone, OpenAI), async AI workflows over RabbitMQ workers, and a full observability stack (PostgreSQL, Redis, MinIO, Docker Compose, Caddy, Prometheus, Grafana, Loki).",
+    meta: "2025 · SmartMath",
   },
 ];
 
@@ -173,8 +149,13 @@ export const contactLines = ["Open to", "<em>security work and collaboration.</e
 
 export const contactLinks: ContactLink[] = [
   {
-    href: "mailto:thanarak.work@gmail.com",
-    label: "thanarak.work@gmail.com",
+    href: "mailto:thanarak_ka@cmu.ac.th",
+    label: "thanarak_ka@cmu.ac.th",
+  },
+  {
+    href: "https://www.linkedin.com/in/thanarak-kanyaprasit-b2b02a306",
+    label: "linkedin / thanarak-kanyaprasit",
+    external: true,
   },
   {
     href: "https://github.com/Thanarak-q",
