@@ -26,9 +26,9 @@ const ANIM_FOR_INDEX: AnimType[] = [
   "blurIn",     // 4  Web Pentest
   "fadeDown",   // 5  engagements
   "scaleIn",    // 6  ·
-  "swing",      // 7  and managing the
-  "fadeUp",     // 8  Microsoft Azure
-  "rotateIn",   // 9  stack
+  "swing",      // 7  and building custom
+  "fadeUp",     // 8  Threat Intel
+  "rotateIn",   // 9  tooling
   "popBounce",  // 10 ✺
 ];
 
@@ -261,7 +261,7 @@ export default function RoleSlide() {
 
           <span className="rs-word"  data-anim="7">
             and&nbsp;<span className="rs-flair">
-              managing
+              building
               <svg
                 className="rs-flair-line"
                 data-flair-line
@@ -279,10 +279,10 @@ export default function RoleSlide() {
                   vectorEffect="non-scaling-stroke"
                 />
               </svg>
-            </span>&nbsp;the
+            </span>&nbsp;custom
           </span>
-          <span data-badge data-anim="8" className="rs-badge rs-badge--outline">Microsoft&nbsp;Azure</span>
-          <span className="rs-word"  data-anim="9">stack</span>
+          <span data-badge data-anim="8" className="rs-badge rs-badge--outline">Threat&nbsp;Intel</span>
+          <span className="rs-word"  data-anim="9">tooling</span>
           <span className="rs-star"  data-anim="10" aria-hidden="true">✺</span>
         </div>
       </div>
