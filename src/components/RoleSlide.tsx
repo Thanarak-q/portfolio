@@ -20,7 +20,7 @@ type AnimType =
 
 const ANIM_FOR_INDEX: AnimType[] = [
   "fadeUp",     // 0  Currently
-  "popBounce",  // 1  Product Security
+  "popBounce",  // 1  Cybersecurity
   "rotateIn",   // 2  —
   "slideLeft",  // 3  running
   "blurIn",     // 4  Web Pentest
@@ -249,7 +249,7 @@ export default function RoleSlide() {
 
         <div ref={lineRef} className="role-slide-line">
           <span className="rs-word"  data-anim="0">Currently</span>
-          <span data-badge data-anim="1" className="rs-badge rs-badge--accent">Product&nbsp;Security</span>
+          <span data-badge data-anim="1" className="rs-badge rs-badge--accent">Cybersecurity</span>
 
           <span className="rs-sep"   data-anim="2">—</span>
 
