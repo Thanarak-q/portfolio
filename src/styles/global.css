@@ -3829,13 +3829,49 @@ footer.foot {
     fill: none;
     stroke: rgba(26, 20, 16, 0.32);
     stroke-width: 1.5px;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    opacity: 0.25;
 }
 
 .wa-edge--dashed {
     stroke: rgba(26, 20, 16, 0.2);
     stroke-dasharray: 0.02 0.015;
+}
+
+.wa-arrowhead {
+    fill: rgba(26, 20, 16, 0.48);
+}
+
+.wa-lane-label {
+    position: absolute;
+    z-index: 2;
+    color: var(--leak);
+    font-size: clamp(6px, 0.65vw, 8px);
+    font-weight: 650;
+    letter-spacing: 0.16em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.wa-lane-label::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 1px;
+    margin-right: 7px;
+    vertical-align: middle;
+    background: currentColor;
+}
+
+.wa-lane-label--interactive {
+    left: 51%;
+    top: 11%;
+}
+
+.wa-lane-label--async {
+    left: 48%;
+    top: 56%;
 }
 
 .wa-node {
@@ -3854,6 +3890,35 @@ footer.foot {
     background: rgba(255, 253, 246, 0.55);
 }
 
+.wa-node--group {
+    align-content: center;
+    gap: 16px;
+    padding: 10px 5px;
+    border-color: rgba(224, 90, 58, 0.32);
+    background: rgba(255, 249, 239, 0.92);
+}
+
+.wa-node--group .wa-label {
+    color: var(--ink);
+    font-weight: 700;
+}
+
+.wa-node--group .wa-detail {
+    width: 100%;
+    padding: 12px 2px;
+    border-top: 1px solid rgba(26, 20, 16, 0.12);
+    border-bottom: 1px solid rgba(26, 20, 16, 0.12);
+    line-height: 2.8;
+}
+
+.wa-node--data {
+    align-content: center;
+    gap: 3px;
+    padding: 4px;
+    border-style: dashed;
+    background: rgba(255, 253, 246, 0.62);
+}
+
 .wa-label {
     font-size: clamp(7px, 0.85vw, 10.5px);
     letter-spacing: 0.1em;
@@ -3861,6 +3926,16 @@ footer.foot {
     color: var(--ink-soft);
     padding: 0 4px;
     text-align: center;
+}
+
+.wa-detail {
+    color: var(--ink-muted);
+    font-size: clamp(5.5px, 0.58vw, 7px);
+    letter-spacing: 0.08em;
+    line-height: 1.3;
+    text-align: center;
+    text-transform: uppercase;
+    white-space: pre-line;
 }
 
 /* ── Threat-model pins ── */

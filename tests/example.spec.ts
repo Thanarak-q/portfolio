@@ -51,12 +51,32 @@ test("case files deck reveals both case studies on scroll", async ({ page }) => 
 
   await scrollToDeckProgress(page, 0.25);
   await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
+  await scrollToDeckProgress(page, 0.4);
+  const architecture = page.locator(".wire-arch");
+  await expect(architecture.getByText("backend api", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai service", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("message broker", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai worker", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai dependencies", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("data services", { exact: true })).toBeVisible();
+  await expect(architecture.getByText(/interactive · streaming/i)).toBeVisible();
+  await expect(architecture.getByText(/async · durable/i)).toBeVisible();
 
   await scrollToDeckProgress(page, 0.8);
   await expect(
     page.getByRole("heading", { name: "Village Security Platform" })
   ).toBeVisible();
   await expect(page.getByText("Records bound to the session")).toBeVisible();
+});
+
+test("homepage does not disclose SmartMath infrastructure vendors", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.locator("body")).not.toContainText(
+    /OpenAI|Pinecone|RabbitMQ|PostgreSQL|Redis|MinIO|Caddy|Prometheus|Grafana|Loki/i
+  );
 });
 
 test("privacy page shows current ownership and deletion contact", async ({

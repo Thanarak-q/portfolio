@@ -101,36 +101,51 @@ interface ArchNode {
   w: number;
   h: number;
   label: string;
+  detail?: string;
   order: number;
   dashed?: boolean;
+  variant?: "group" | "data";
 }
 
 const ARCH_NODES: ArchNode[] = [
-  { x: 4, y: 24, w: 13, h: 14, label: "client", order: 0 },
-  { x: 24, y: 24, w: 14, h: 14, label: "caddy · tls", order: 2 },
-  { x: 45, y: 24, w: 14, h: 14, label: "api", order: 4 },
-  { x: 45, y: 56, w: 14, h: 14, label: "rabbitmq", order: 6 },
-  { x: 66, y: 56, w: 15, h: 14, label: "ai worker", order: 8 },
-  { x: 66, y: 8, w: 15, h: 13, label: "openai", order: 10 },
-  { x: 86, y: 42, w: 12, h: 14, label: "pinecone", order: 12 },
-  { x: 24, y: 56, w: 14, h: 14, label: "postgres", order: 14 },
-  { x: 4, y: 56, w: 13, h: 14, label: "redis", order: 16 },
-  { x: 45, y: 84, w: 36, h: 10, label: "prom · grafana · loki", order: 18, dashed: true },
+  { x: 3, y: 38, w: 15, h: 16, label: "web apps", order: 0 },
+  { x: 25, y: 38, w: 17, h: 16, label: "backend api", order: 2 },
+  { x: 51, y: 19, w: 16, h: 16, label: "ai service", order: 5 },
+  {
+    x: 81,
+    y: 16,
+    w: 16,
+    h: 62,
+    label: "ai dependencies",
+    detail: "model provider\nretrieval index",
+    order: 7,
+    variant: "group",
+  },
+  { x: 48, y: 63, w: 16, h: 16, label: "message broker", order: 10 },
+  { x: 67, y: 63, w: 13, h: 16, label: "ai worker", order: 12 },
+  {
+    x: 25,
+    y: 75,
+    w: 17,
+    h: 15,
+    label: "data services",
+    detail: "records · files · state",
+    order: 15,
+    variant: "data",
+  },
 ];
 
-const ARCH_EDGES: { d: string; order: number; dashed?: boolean }[] = [
-  { d: "M17,31 L24,31", order: 1 },
-  { d: "M38,31 L45,31", order: 3 },
-  { d: "M52,38 L52,56", order: 5 },
-  { d: "M59,63 L66,63", order: 7 },
-  { d: "M73.5,56 L73.5,21", order: 9 },
-  { d: "M81,60 L86,52", order: 11 },
-  { d: "M46,38 L31,56", order: 13 },
-  { d: "M24,63 L17,63", order: 15 },
-  { d: "M63,84 L63,70", order: 17, dashed: true },
+const ARCH_EDGES: { d: string; order: number; dashed?: boolean; arrow?: boolean }[] = [
+  { d: "M18,46 H25", order: 1, arrow: true },
+  { d: "M42,46 H46 V27 H51", order: 4, arrow: true },
+  { d: "M67,27 H81", order: 6, arrow: true },
+  { d: "M42,46 H46 V71 H48", order: 9, arrow: true },
+  { d: "M64,71 H67", order: 11, arrow: true },
+  { d: "M80,71 H81", order: 13, arrow: true },
+  { d: "M33.5,54 V75", order: 14, dashed: true, arrow: true },
 ];
 
-/** Stylized service-topology wireframe (SmartMath). */
+/** Sanitized, illustrative system wireframe for the public case study. */
 function ArchitectureWire() {
   return (
     <div className="wire wire-arch" aria-hidden="true">
@@ -139,6 +154,19 @@ function ArchitectureWire() {
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
+        <defs>
+          <marker
+            id="architecture-arrow"
+            viewBox="0 0 6 6"
+            refX="5.5"
+            refY="3"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto"
+          >
+            <path className="wa-arrowhead" d="M0,0 L6,3 L0,6 Z" />
+          </marker>
+        </defs>
         {ARCH_EDGES.map((e) => (
           <path
             key={e.order}
@@ -146,15 +174,22 @@ function ArchitectureWire() {
             data-wire={e.order}
             data-edge="true"
             className={`wa-edge ${e.dashed ? "wa-edge--dashed" : ""}`}
+            markerEnd={e.arrow ? "url(#architecture-arrow)" : undefined}
             pathLength={1}
             vectorEffect="non-scaling-stroke"
           />
         ))}
       </svg>
+      <span className="wa-lane-label wa-lane-label--interactive">
+        Interactive · Streaming
+      </span>
+      <span className="wa-lane-label wa-lane-label--async">
+        Async · Durable
+      </span>
       {ARCH_NODES.map((n) => (
         <div
           key={n.order}
-          className={`wa-node ${n.dashed ? "wa-node--dashed" : ""}`}
+          className={`wa-node ${n.dashed ? "wa-node--dashed" : ""} ${n.variant ? `wa-node--${n.variant}` : ""}`}
           data-wire={n.order}
           style={{
             left: `${n.x}%`,
@@ -164,6 +199,7 @@ function ArchitectureWire() {
           }}
         >
           <span className="wa-label">{n.label}</span>
+          {n.detail && <span className="wa-detail">{n.detail}</span>}
         </div>
       ))}
     </div>
@@ -370,9 +406,11 @@ export default function CaseDeck({ studies, runwayVH = 760 }: CaseDeckProps) {
             // Dashed edges keep their dash pattern; fade them in instead.
             el.style.opacity = String(local);
           } else {
-            el.style.strokeDasharray = "1";
-            el.style.strokeDashoffset = String(1 - local);
-            el.style.opacity = local > 0 ? "1" : "0";
+            // Keep the topology complete throughout the scan. Opacity gives
+            // the reveal motion without turning connectors into fragments.
+            el.style.strokeDasharray = "none";
+            el.style.strokeDashoffset = "0";
+            el.style.opacity = String(0.25 + local * 0.75);
           }
         } else {
           el.style.opacity = String(local);
