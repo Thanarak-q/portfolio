@@ -23,8 +23,24 @@ test("homepage renders core sections", async ({ page }) => {
     page.getByRole("heading", { name: /Open to/i })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /thanarak\.work@gmail\.com/i })
-  ).toHaveAttribute("href", "mailto:thanarak.work@gmail.com");
+    page.getByRole("link", { name: /thanarak_ka@cmu\.ac\.th/i })
+  ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
+});
+
+test("case files section renders both case studies", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("link", { name: "Cases" })).toHaveAttribute(
+    "href",
+    "#cases"
+  );
+  await expect(
+    page.getByRole("heading", { name: "Village Security Platform" })
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "SmartMath" })
+  ).toBeVisible();
+  await expect(page.getByText("Retrieved text is data, not orders")).toBeVisible();
 });
 
 test("privacy page shows current ownership and deletion contact", async ({
@@ -39,8 +55,8 @@ test("privacy page shows current ownership and deletion contact", async ({
     page.getByText(/platform compliance for connected apps/i)
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /thanarak\.work@gmail\.com/i }).first()
-  ).toHaveAttribute("href", "mailto:thanarak.work@gmail.com");
+    page.getByRole("link", { name: /thanarak_ka@cmu\.ac\.th/i }).first()
+  ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
 });
 
 test("curriculum checker page renders setup and runs audit", async ({ page }) => {
