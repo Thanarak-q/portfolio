@@ -8,7 +8,7 @@ import ImageReveal from "../components/ImageReveal";
 import PyramidFlip from "../components/PyramidFlip";
 import RoleSlide from "../components/RoleSlide";
 import BookShelf from "../components/BookShelf";
-import CaseFile from "../components/CaseFile";
+import CaseDeck from "../components/CaseDeck";
 import {
   aboutLines,
   aboutStats,
@@ -171,9 +171,7 @@ import {
       </RiseIn>
     </div>
 
-    {caseStudies.map((study) => (
-      <CaseFile client:load study={study} />
-    ))}
+    <CaseDeck client:load studies={caseStudies} />
   </section>
 
   <!-- CONTACT -->

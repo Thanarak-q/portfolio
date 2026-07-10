@@ -27,20 +27,38 @@ test("homepage renders core sections", async ({ page }) => {
   ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
 });
 
-test("case files section renders both case studies", async ({ page }) => {
+const scrollToDeckProgress = async (page: Page, progress: number) => {
+  await page.evaluate(async (p) => {
+    const deck = document.querySelector<HTMLElement>(".case-deck");
+    if (!deck) return;
+    const top = deck.getBoundingClientRect().top + window.scrollY;
+    const y = top + (deck.offsetHeight - window.innerHeight) * p;
+    // Repeat across frames so smooth-scroll libs can't drift the position
+    for (let i = 0; i < 12; i++) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+  }, progress);
+};
+
+test("case files deck reveals both case studies on scroll", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("link", { name: "Cases" })).toHaveAttribute(
     "href",
     "#cases"
   );
+
+  await scrollToDeckProgress(page, 0.25);
   await expect(
     page.getByRole("heading", { name: "Village Security Platform" })
   ).toBeVisible();
+
+  await scrollToDeckProgress(page, 0.8);
+  await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "SmartMath" })
+    page.getByText("Retrieved text is data, not orders")
   ).toBeVisible();
-  await expect(page.getByText("Retrieved text is data, not orders")).toBeVisible();
 });
 
 test("privacy page shows current ownership and deletion contact", async ({
