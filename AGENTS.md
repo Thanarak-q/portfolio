@@ -2,37 +2,37 @@
 
 ## Project Structure & Module Organization
 
-This is an Astro portfolio site with React islands. Primary source lives in `src/`: pages in `src/pages/`, shared UI in `src/components/`, layouts in `src/layouts/`, utilities and content data in `src/lib/`, and global styles in `src/styles/global.css`.
+This is an Astro portfolio site with React islands. Application code is in `src/`: routes in `src/pages/`, reusable UI in `src/components/`, layouts in `src/layouts/`, data and utilities in `src/lib/`, and styles in `src/styles/`.
 
-Static media belongs in `public/assets/`. End-to-end tests live in `tests/`. `project/` contains reference prototypes and source media; avoid changing it unless the task targets those files. `dist/` and `.astro/` are generated output; do not edit them by hand.
+Put public images and video in `public/assets/`. Playwright tests live in `tests/`. `project/` holds reference prototypes and source media; change it only when a task explicitly targets it. Never hand-edit generated `dist/` or `.astro/` files.
 
 ## Build, Test, and Development Commands
 
-- `npm install` installs dependencies from `package-lock.json`.
-- `npm run dev` starts the Astro development server for local work.
-- `npm run build` creates the production build in `dist/`.
-- `npm run preview` serves the built site locally.
-- `npm run test:e2e` runs the Playwright end-to-end suite.
+- `npm install` installs the lockfile-pinned dependencies.
+- `npm run dev` starts Astro’s local development server.
+- `npm run build` produces the production site in `dist/`.
+- `npm run preview` serves the built site for a production check.
+- `npm run test:e2e` runs the Playwright browser suite.
 
-Use `npm run build` as baseline verification, and run `npm run test:e2e` when routes, navigation, content visibility, or user-facing behavior changes.
+Run `npm run build` for every change. Also run `npm run test:e2e` after changes to routes, navigation, visible content, scrolling, or animation.
 
 ## Coding Style & Naming Conventions
 
-Use the existing Astro, TypeScript, React, and CSS patterns in `src/`. Keep two-space indentation. Name Astro layouts and React components with `PascalCase` filenames, such as `Base.astro` and `HeroClip.tsx`. Use `camelCase` for functions, variables, hooks, and utilities.
+Follow the existing Astro, TypeScript, React, and CSS patterns in `src/`, with two-space indentation. Use `PascalCase` filenames for components and layouts (for example, `HeroClip.tsx` and `Base.astro`) and `camelCase` for functions, variables, hooks, and utilities.
 
-Keep components focused and place behavior near the feature it supports. Prefer package-managed dependencies over pasted third-party scripts. No formatter or lint script is configured, so match the surrounding style.
+Keep components focused and place behavior close to its feature. Prefer package-managed dependencies to pasted third-party scripts. No formatter or lint command is configured; match nearby code.
 
 ## Testing Guidelines
 
-Playwright is the configured test framework. Test files live in `tests/` and use the `*.spec.ts` naming pattern. Existing tests assert the homepage title, navigation, key headings, and contact link.
+Playwright is the configured test framework. Add browser tests in `tests/` with the `*.spec.ts` suffix. The existing suite covers the homepage title, navigation, headings, and contact link.
 
-For UI, animation, or scroll changes, verify desktop and mobile widths and confirm media loads from `public/assets/`. Add or update Playwright tests for critical visible behavior. No coverage threshold is configured.
+For UI, animation, or scroll changes, verify both desktop and mobile widths and ensure media resolves from `public/assets/`. Add or update a test for critical user-visible behavior. No coverage threshold is configured.
 
 ## Commit & Pull Request Guidelines
 
-Recent history uses Conventional Commit-style messages, for example `feat: rebuild focus + books + contact sections` and `fix: separate head reveal`. Use `feat:`, `fix:`, `chore:`, `docs:`, or `test:` with a concise imperative summary.
+Use Conventional Commit-style subjects, such as `feat: add case deck` or `fix: correct hero reveal`. Prefer `feat:`, `fix:`, `chore:`, `docs:`, or `test:` followed by a concise imperative summary.
 
-Pull requests should include a short summary, verification steps, and screenshots or recordings for visible UI changes. Mention new large media assets and affected routes.
+Pull requests need a concise summary and verification steps. Include screenshots or a recording for visible changes, and call out affected routes and any new large media assets.
 
 ## Security & Configuration Tips
 

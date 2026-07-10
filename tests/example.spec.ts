@@ -23,8 +23,60 @@ test("homepage renders core sections", async ({ page }) => {
     page.getByRole("heading", { name: /Open to/i })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /thanarak\.work@gmail\.com/i })
-  ).toHaveAttribute("href", "mailto:thanarak.work@gmail.com");
+    page.getByRole("link", { name: /thanarak_ka@cmu\.ac\.th/i })
+  ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
+});
+
+const scrollToDeckProgress = async (page: Page, progress: number) => {
+  await page.evaluate(async (p) => {
+    const deck = document.querySelector<HTMLElement>(".case-deck");
+    if (!deck) return;
+    const top = deck.getBoundingClientRect().top + window.scrollY;
+    const y = top + (deck.offsetHeight - window.innerHeight) * p;
+    // Repeat across frames so smooth-scroll libs can't drift the position
+    for (let i = 0; i < 12; i++) {
+      window.scrollTo(0, y);
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+  }, progress);
+};
+
+test("case files deck reveals both case studies on scroll", async ({ page }) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("link", { name: "Cases" })).toHaveAttribute(
+    "href",
+    "#cases"
+  );
+
+  await scrollToDeckProgress(page, 0.25);
+  await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
+  await scrollToDeckProgress(page, 0.4);
+  const architecture = page.locator(".wire-arch");
+  await expect(architecture.getByText("backend api", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai service", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("message broker", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai worker", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("ai dependencies", { exact: true })).toBeVisible();
+  await expect(architecture.getByText("data services", { exact: true })).toBeVisible();
+  await expect(architecture.getByText(/interactive · streaming/i)).toBeVisible();
+  await expect(architecture.getByText(/async · durable/i)).toBeVisible();
+
+  await scrollToDeckProgress(page, 0.8);
+  await expect(
+    page.getByRole("heading", { name: "Village Security Platform" })
+  ).toBeVisible();
+  await expect(page.getByText("Records bound to the session")).toBeVisible();
+});
+
+test("homepage does not disclose SmartMath infrastructure vendors", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.locator("body")).not.toContainText(
+    /OpenAI|Pinecone|RabbitMQ|PostgreSQL|Redis|MinIO|Caddy|Prometheus|Grafana|Loki/i
+  );
 });
 
 test("privacy page shows current ownership and deletion contact", async ({
@@ -39,8 +91,8 @@ test("privacy page shows current ownership and deletion contact", async ({
     page.getByText(/platform compliance for connected apps/i)
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: /thanarak\.work@gmail\.com/i }).first()
-  ).toHaveAttribute("href", "mailto:thanarak.work@gmail.com");
+    page.getByRole("link", { name: /thanarak_ka@cmu\.ac\.th/i }).first()
+  ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
 });
 
 test("curriculum checker page renders setup and runs audit", async ({ page }) => {

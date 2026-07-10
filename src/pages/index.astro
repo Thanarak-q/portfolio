@@ -8,10 +8,14 @@ import ImageReveal from "../components/ImageReveal";
 import PyramidFlip from "../components/PyramidFlip";
 import RoleSlide from "../components/RoleSlide";
 import BookShelf from "../components/BookShelf";
+import CaseDeck from "../components/CaseDeck";
 import {
   aboutLines,
   aboutStats,
   booksRead,
+  caseIntro,
+  caseLines,
+  caseStudies,
   contactLines,
   contactLinks,
   focusItems,
@@ -85,7 +89,7 @@ import {
         </h2>
         <p class="focus-loop-caption" data-focus-intro-item>
           Web application penetration testing, threat intelligence, and custom
-          tooling — with AI security as an active learning interest.
+          tooling — currently studying AI security.
         </p>
       </div>
     </div>
@@ -126,7 +130,7 @@ import {
 
       <LineReveal
         client:load
-        class="big-statement"
+        className="big-statement"
         lines={workLines}
       />
 
@@ -153,6 +157,23 @@ import {
     </div>
   </section>
 
+  <!-- CASE FILES -->
+  <section id="cases" class="cases">
+    <div class="wrap cases-intro">
+      <RiseIn client:load distance={40}>
+        <div class="eyebrow">04 — Case files</div>
+      </RiseIn>
+
+      <LineReveal client:load className="big-statement" lines={caseLines} />
+
+      <RiseIn client:load distance={30} delay={0.1}>
+        <p class="cases-caption">{caseIntro}</p>
+      </RiseIn>
+    </div>
+
+    <CaseDeck client:load studies={caseStudies} />
+  </section>
+
   <!-- CONTACT -->
   <section id="contact" class="content contact-bg">
     <video
@@ -168,7 +189,7 @@ import {
     <div class="contact-bg-scrim" aria-hidden="true"></div>
 
     <div class="wrap">
-      <div class="eyebrow">04 — Contact</div>
+      <div class="eyebrow">05 — Contact</div>
 
       <h2 class="big-statement" set:html={contactLines.join(" ")} />
 
@@ -219,6 +240,7 @@ import {
       { id: "focus", label: "Focus" },
       { id: "interlude-2", label: "Focus" },
       { id: "work", label: "Work" },
+      { id: "cases", label: "Cases" },
       { id: "contact", label: "Contact" },
     ];
 
