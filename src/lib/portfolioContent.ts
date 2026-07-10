@@ -116,7 +116,7 @@ export const booksRead: BookNote[] = [
     shortTitle: "Bug Bounty Bootcamp",
     subtitle: "The Guide to Finding and Reporting Web Vulnerabilities",
     tag: "Web hacking · methodology",
-    note: "If you're new to pentest, start here. The clearest field guide I've come across — gives you a structured path instead of dropping you straight into the chaos.",
+    note: "A clear starting point for web penetration testing, with a structured path through the core techniques.",
     palette: "leak",
     spineWidth: "md",
   },
@@ -143,7 +143,7 @@ export const booksRead: BookNote[] = [
     shortTitle: "AI Red Teaming",
     subtitle: "Data, training, output — the full kill chain",
     tag: "AI security · in progress",
-    note: "Still reading. Already changing how I think about prompt injection — it's just the visible end of a much bigger surface that runs through data, training, and the agent loop.",
+    note: "Still reading. It frames prompt injection as one part of a wider attack surface across data, training, and agent workflows.",
     palette: "rose",
     spineWidth: "md",
   },
@@ -152,7 +152,7 @@ export const booksRead: BookNote[] = [
     shortTitle: "Hacker Playbook 3",
     subtitle: "Practical Guide to Penetration Testing",
     tag: "Red team · field manual",
-    note: "Made the difference between pentest and red team click. Pentest hunts as many bugs as possible inside a scope; red team picks an objective and chains everything — phishing, evasion, lateral movement, persistence — and you're also testing whether the defenders ever notice. The goal isn't a bug list, it's the story of an attack.",
+    note: "Clarifies the distinction between penetration testing and red teaming: a pentest finds vulnerabilities within scope, while a red-team exercise pursues an objective and tests detection and response.",
     palette: "ink",
     spineWidth: "lg",
   },
@@ -179,15 +179,14 @@ export const workItems: WorkItem[] = [
   },
 ];
 
-export const caseLines = ["Built, then", "<em>audited on paper.</em>"];
+export const caseLines = ["Built and", "<em>reviewed.</em>"];
 
 export const caseIntro =
-  "Selected builds documented the way I'd review them — what the product does, and where the risk lives. Scroll to run the scan.";
+  "Selected builds documented with their purpose, security decisions, and remaining risks.";
 
-export const caseStudies: CaseStudy[] = [
-  {
+const villageCaseStudy: CaseStudy = {
     id: "village",
-    number: "01",
+    number: "02",
     title: "Village Security Platform",
     role: "Scrum Master · Full-Stack Developer",
     context: "University course project · team delivery",
@@ -197,7 +196,7 @@ export const caseStudies: CaseStudy[] = [
       "A gated-community platform: admins approve residents and manage houses, guards log visitors in and out at the gate, and everyone gets real-time notifications. I ran the sprints and built the access-control core.",
     visual: "dashboard",
     frameLabel: "village-security.app/dashboard",
-    stamp: "Threat modeled",
+    stamp: "Security reviewed",
     pins: [
       {
         x: 76,
@@ -205,7 +204,7 @@ export const caseStudies: CaseStudy[] = [
         side: "left",
         chip: "APPROVAL",
         label: "No self-activated accounts",
-        note: "New residents land in a pending state with zero data access until an admin approves them — signup alone never grants a foothold inside the village.",
+        note: "New residents stay pending with no data access until an admin approves them; signing up alone does not grant access.",
         kind: "defense",
       },
       {
@@ -236,20 +235,21 @@ export const caseStudies: CaseStudy[] = [
         kind: "threat",
       },
     ],
-  },
-  {
+};
+
+const smartMathCaseStudy: CaseStudy = {
     id: "smartmath",
-    number: "02",
+    number: "01",
     title: "SmartMath",
     role: "AI Engineer · System Architect",
     context: "AI-powered math learning platform",
     year: "2025",
     stack: ["LangChain · Pinecone", "RabbitMQ", "PostgreSQL · Redis", "Docker · Grafana"],
     summary:
-      "A microservices platform where students ask math questions and a RAG pipeline answers — hybrid retrieval, vector search and reranking, async AI workers over RabbitMQ, and a full observability stack. I designed the architecture end to end.",
+      "A microservices platform where students ask math questions and a RAG pipeline answers using hybrid retrieval, vector search, reranking, async RabbitMQ workers, and observability tooling. I designed the architecture.",
     visual: "architecture",
     frameLabel: "smartmath · service topology",
-    stamp: "Arch reviewed",
+    stamp: "Architecture reviewed",
     pins: [
       {
         x: 73.5,
@@ -275,7 +275,7 @@ export const caseStudies: CaseStudy[] = [
         side: "right",
         chip: "QUEUE",
         label: "Workers behind a broker",
-        note: "AI workers never face the internet — they only consume RabbitMQ jobs the API already sanitized. The queue is a trust boundary, not just a performance trick.",
+        note: "AI workers are not internet-facing; they only consume RabbitMQ jobs that have passed API validation. The queue also serves as a trust boundary.",
         kind: "defense",
       },
       {
@@ -288,8 +288,9 @@ export const caseStudies: CaseStudy[] = [
         kind: "threat",
       },
     ],
-  },
-];
+};
+
+export const caseStudies: CaseStudy[] = [smartMathCaseStudy, villageCaseStudy];
 
 export const contactLines = ["Open to", "<em>product security work.</em>"];
 

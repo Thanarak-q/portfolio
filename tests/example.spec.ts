@@ -50,15 +50,13 @@ test("case files deck reveals both case studies on scroll", async ({ page }) => 
   );
 
   await scrollToDeckProgress(page, 0.25);
+  await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
+
+  await scrollToDeckProgress(page, 0.8);
   await expect(
     page.getByRole("heading", { name: "Village Security Platform" })
   ).toBeVisible();
-
-  await scrollToDeckProgress(page, 0.8);
-  await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
-  await expect(
-    page.getByText("Retrieved text is data, not orders")
-  ).toBeVisible();
+  await expect(page.getByText("Records bound to the session")).toBeVisible();
 });
 
 test("privacy page shows current ownership and deletion contact", async ({
