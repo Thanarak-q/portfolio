@@ -48,6 +48,8 @@ export interface CasePin {
   chip: string;
   /** Margin-note heading. */
   label: string;
+  /** Plain-language lens for a project decision. */
+  category: string;
   /** Margin-note body — the actual security thinking. */
   note: string;
   kind: "threat" | "defense";
@@ -62,6 +64,7 @@ export interface CaseStudy {
   year: string;
   stack: string[];
   summary: string;
+  mobileSummary: string;
   /** Which built-in wireframe visual to render inside the frame. */
   visual: "dashboard" | "architecture";
   /** Mono text in the frame's chrome bar. */
@@ -75,7 +78,7 @@ export const navLinks: NavLink[] = [
   { href: "#about", label: "About" },
   { href: "#focus", label: "Focus" },
   { href: "#work", label: "Work" },
-  { href: "#cases", label: "Cases" },
+  { href: "#cases", label: "Projects" },
 ];
 
 export const aboutLines: string[] = [];
@@ -179,10 +182,10 @@ export const workItems: WorkItem[] = [
   },
 ];
 
-export const caseLines = ["Built and", "<em>reviewed.</em>"];
+export const caseLines = ["Systems I built,", "<em>and the decisions behind them.</em>"];
 
 export const caseIntro =
-  "Selected builds documented with their purpose, security decisions, and remaining risks.";
+  "Selected systems, explained through what I built and the technical decisions behind it.";
 
 const villageCaseStudy: CaseStudy = {
     id: "village",
@@ -193,46 +196,51 @@ const villageCaseStudy: CaseStudy = {
     year: "2025",
     stack: ["Next.js", "Bun · Elysia", "WebSocket", "RBAC"],
     summary:
-      "A gated-community platform: admins approve residents and manage houses, guards log visitors in and out at the gate, and everyone gets real-time notifications. I ran the sprints and built the access-control core.",
+      "Scrum Master on a team project for community operations. I planned sprints, coordinated delivery across the frontend, backend, and real-time notifications, and contributed to visitor and guard workflows.",
+    mobileSummary: "Ran sprints and helped ship visitor, guard, and real-time notification flows.",
     visual: "dashboard",
     frameLabel: "village-security.app/dashboard",
-    stamp: "Security reviewed",
+    stamp: "Team delivery",
     pins: [
       {
         x: 76,
         y: 14,
         side: "left",
-        chip: "APPROVAL",
-        label: "No self-activated accounts",
-        note: "New residents stay pending with no data access until an admin approves them; signing up alone does not grant access.",
+        chip: "SPRINTS",
+        label: "Planned the delivery cadence",
+        category: "Scrum Master",
+        note: "Turned the course scope into smaller deliverable slices and kept the team focused on the next working increment.",
         kind: "defense",
       },
       {
         x: 12,
         y: 38,
         side: "right",
-        chip: "RBAC",
-        label: "Role checks live server-side",
-        note: "Admin, resident, and guard see different dashboards — but the UI is just a mirror. Every backend route re-checks the caller's role, so hiding a button never counts as security.",
+        chip: "BACKLOG",
+        label: "Kept priorities visible",
+        category: "product delivery",
+        note: "Aligned work around resident approval, visitor check-in and check-out, and guard workflows for the first usable release.",
         kind: "defense",
       },
       {
         x: 58,
         y: 62,
         side: "right",
-        chip: "IDOR",
-        label: "Records bound to the session",
-        note: "House and visitor records are looked up through the caller's own identity, not a raw ID from the request — guessing another house number gets you a 403, not a neighbor's visitor log.",
-        kind: "threat",
+        chip: "HANDOFFS",
+        label: "Coordinated cross-team handoffs",
+        category: "team facilitation",
+        note: "Connected frontend, backend, and real-time notification work so dependent features could be tested together.",
+        kind: "defense",
       },
       {
         x: 52,
         y: 82,
         side: "left",
-        chip: "WS AUTH",
-        label: "Sockets join by verified identity",
-        note: "Real-time notifications are room-scoped to the authenticated user. A guard's gate events push to that village only — the socket layer trusts the session, never the client's claim.",
-        kind: "threat",
+        chip: "DELIVERY",
+        label: "Contributed to core flows",
+        category: "implementation",
+        note: "Built and refined visitor-facing screens and supported the notification and dashboard integration work.",
+        kind: "defense",
       },
     ],
 };
@@ -246,18 +254,20 @@ const smartMathCaseStudy: CaseStudy = {
     year: "2025",
     stack: ["Web Apps · API", "Streamed RAG", "Durable Jobs", "Private Storage"],
     summary:
-      "Student and admin web apps share a central API. Interactive tutoring streams through an internal RAG service, while quiz generation runs as durable background jobs. The platform separates primary records, private files, transient state, and retrieval data.",
+      "Built core learning flows for an AI-powered math platform: streamed RAG chat, document ingestion and indexing, and background quiz generation. I designed the API boundaries and data flow between the web apps, backend, and AI services.",
+    mobileSummary: "Built RAG chat, ingestion, and async quiz generation.",
     visual: "architecture",
     frameLabel: "simplified system flow",
-    stamp: "Architecture reviewed",
+    stamp: "System design",
     pins: [
       {
         x: 89,
         y: 29,
         side: "left",
         chip: "RAG INPUT",
-        label: "Retrieved content is untrusted",
-        note: "Course material enters model context after hybrid retrieval and optional reranking, so uploaded content remains an attack surface.",
+        label: "Built the retrieval path",
+        category: "RAG design",
+        note: "Implemented hybrid retrieval and reranking so chat and quiz generation use relevant course material.",
         kind: "threat",
       },
       {
@@ -265,8 +275,9 @@ const smartMathCaseStudy: CaseStudy = {
         y: 49,
         side: "right",
         chip: "AUTH PROXY",
-        label: "AI stays behind the API",
-        note: "The backend verifies session ownership for chat and administrator authorization for ingestion before proxying to the internal AI service.",
+        label: "Designed the API boundary",
+        category: "access design",
+        note: "Added session-aware access controls between the web apps, backend, and internal AI services.",
         kind: "defense",
       },
       {
@@ -274,17 +285,19 @@ const smartMathCaseStudy: CaseStudy = {
         y: 84,
         side: "right",
         chip: "DURABLE JOB",
-        label: "Background work checks state",
-        note: "Quiz jobs are recorded before dispatch; workers fetch current job state and report results through the backend.",
+        label: "Built durable quiz jobs",
+        category: "async workflow",
+        note: "Moved long-running quiz generation into an outbox-backed queue with worker processing and status updates.",
         kind: "defense",
       },
       {
-        x: 49,
-        y: 84,
-        side: "left",
+        x: 34,
+        y: 92,
+        side: "right",
         chip: "UPLOAD",
-        label: "Uploads checked before indexing",
-        note: "Administrative ingestion is size- and type-checked before document processing and retrieval indexing.",
+        label: "Built the ingestion pipeline",
+        category: "input boundary",
+        note: "Added authenticated uploads, file validation, document processing, and retrieval indexing.",
         kind: "defense",
       },
     ],

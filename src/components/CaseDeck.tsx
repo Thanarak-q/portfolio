@@ -268,7 +268,7 @@ function CasePanel({ study }: { study: CaseStudy }) {
       <div className="cf-side">
         <header className="cf-meta">
           <div className="cf-eyebrow mono" data-cf-meta>
-            Case file {study.number} — {study.year}
+            Project {study.number} — {study.year}
           </div>
           <h3 className="cf-title" data-cf-meta>
             {study.title}
@@ -276,6 +276,9 @@ function CasePanel({ study }: { study: CaseStudy }) {
           <p className="cf-role" data-cf-meta>
             {study.role}
             <span className="cf-context"> · {study.context}</span>
+          </p>
+          <p className="cf-mobile-summary" data-cf-meta>
+            {study.mobileSummary}
           </p>
           <div className="cf-stack" data-cf-meta>
             {study.stack.map((item) => (
@@ -302,9 +305,7 @@ function CasePanel({ study }: { study: CaseStudy }) {
               <div className="cf-note-body">
                 <span className="cf-note-label">
                   {pin.label}
-                  <em className="cf-note-kind mono">
-                    {pin.kind === "threat" ? "attack surface" : "defense"}
-                  </em>
+                  <em className="cf-note-kind mono">{pin.category}</em>
                 </span>
                 <p className="cf-note-text">{pin.note}</p>
               </div>
@@ -513,7 +514,7 @@ export default function CaseDeck({ studies, runwayVH = 760 }: CaseDeckProps) {
       ref={sectionRef}
       className="case-deck"
       style={{ height: `${runwayVH}vh` }}
-      aria-label="Case files"
+      aria-label="Projects"
     >
       <div className="cf-pin">
         {studies.map((study) => (
@@ -521,7 +522,7 @@ export default function CaseDeck({ studies, runwayVH = 760 }: CaseDeckProps) {
             key={study.id}
             className="cd-panel"
             data-cd-panel
-            aria-label={`Case file ${study.number} — ${study.title}`}
+            aria-label={`Project ${study.number} — ${study.title}`}
           >
             <span className="cd-ghost" data-cd-ghost aria-hidden="true">
               {study.number}
