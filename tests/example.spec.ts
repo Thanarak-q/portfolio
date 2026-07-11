@@ -44,7 +44,7 @@ const scrollToDeckProgress = async (page: Page, progress: number) => {
 test("case files deck reveals both case studies on scroll", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("link", { name: "Cases" })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Projects" })).toHaveAttribute(
     "href",
     "#cases"
   );
@@ -66,7 +66,18 @@ test("case files deck reveals both case studies on scroll", async ({ page }) => 
   await expect(
     page.getByRole("heading", { name: "Village Security Platform" })
   ).toBeVisible();
-  await expect(page.getByText("Records bound to the session")).toBeVisible();
+  await expect(page.getByText("Contributed to core flows")).toBeVisible();
+});
+
+test("mobile project card keeps the SmartMath contribution summary visible", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  await scrollToDeckProgress(page, 0.25);
+  await expect(page.locator(".cd-panel").first().locator(".cf-mobile-summary"))
+    .toHaveText("Built RAG chat, ingestion, and async quiz generation.");
 });
 
 test("homepage does not disclose SmartMath infrastructure vendors", async ({
