@@ -151,6 +151,15 @@ export const booksRead: BookNote[] = [
     spineWidth: "md",
   },
   {
+    title: "Threat Modeling: Designing for Security by Adam Shostack",
+    shortTitle: "Threat Modeling",
+    subtitle: "Designing for Security",
+    tag: "Secure design · methodology",
+    note: "This book teaches threat modeling as a step-by-step process: how to get started, which methods and techniques to use, how to document and report the findings, and how to discuss security concerns with development teams so everyone shares the same understanding and can use the results to build a more secure system.",
+    palette: "leak",
+    spineWidth: "lg",
+  },
+  {
     title: "The Hacker Playbook 3: Practical Guide to Penetration Testing",
     shortTitle: "Hacker Playbook 3",
     subtitle: "Practical Guide to Penetration Testing",
