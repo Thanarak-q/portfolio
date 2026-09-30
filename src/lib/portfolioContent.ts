@@ -8,10 +8,17 @@ export interface StatItem {
   label: string;
 }
 
+export interface FocusArticle {
+  title: string;
+  href: string;
+  date?: string;
+}
+
 export interface FocusItem {
   name: string;
   src: string;
   alt: string;
+  article?: FocusArticle;
 }
 
 export interface BookNote {
@@ -87,14 +94,24 @@ export const aboutStats: StatItem[] = [];
 
 export const focusItems: FocusItem[] = [
   {
-    name: "Web Pentest",
+    name: "API Keys",
     src: "/assets/chair.png",
     alt: "Empty chair, low light",
+    article: {
+      title:
+        "[WRITE-UP] การออกแบบ API Key Feature ด้วย System Design และ Threat Modeling",
+      href: "https://www.linkedin.com/pulse/write-up-%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%AD%E0%B8%AD%E0%B8%81%E0%B9%81%E0%B8%9A%E0%B8%9A-api-key-feature-%E0%B8%94%E0%B8%A7%E0%B8%A2-system-design-%E0%B9%81%E0%B8%A5%E0%B8%B0-kanyaprasit-5folc",
+      date: "Sep 2026",
+    },
   },
   {
-    name: "AI Security",
+    name: "Built with AI",
     src: "/assets/flower.png",
     alt: "Single flower, close crop",
+    article: {
+      title: "How I Used AI to Build My Portfolio",
+      href: "https://www.linkedin.com/pulse/how-i-used-ai-build-my-portfolio-thanarak-kanyaprasit-zf9ac",
+    },
   },
   {
     name: "Threat Intel",

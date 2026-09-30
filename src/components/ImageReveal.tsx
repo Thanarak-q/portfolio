@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIsomorphicLayoutEffect } from "../lib/useIsomorphicLayoutEffect";
+import type { FocusArticle } from "../lib/portfolioContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,15 +18,17 @@ interface ImageRevealProps {
   year?: string;
   src: string;
   alt: string;
+  article?: FocusArticle;
 }
 
 export default function ImageReveal({
   index,
   total,
   name,
-  eyebrow = "Focus",
+  eyebrow,
   src,
   alt,
+  article,
 }: ImageRevealProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -66,7 +69,9 @@ export default function ImageReveal({
   return (
     <section ref={sectionRef} className="image-reveal-static">
       <div className="ir-meta-top wrap">
-        <span className="ir-eyebrow">{eyebrow}</span>
+        <span className="ir-eyebrow">
+          {eyebrow ?? (article ? "Write-up" : "Focus")}
+        </span>
         <span className="ir-counter">
           {String(index).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </span>
@@ -77,8 +82,34 @@ export default function ImageReveal({
       </h2>
 
       <div ref={imageRef} className="ir-image">
-        <img src={src} alt={alt} loading="lazy" decoding="async" />
+        {article ? (
+          <a
+            href={article.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Read "${article.title}" on LinkedIn`}
+          >
+            <img src={src} alt={alt} loading="lazy" decoding="async" />
+          </a>
+        ) : (
+          <img src={src} alt={alt} loading="lazy" decoding="async" />
+        )}
       </div>
+
+      {article && (
+        <a
+          className="ir-article"
+          href={article.href}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="ir-article-title">{article.title}</span>
+          <span className="ir-article-meta">
+            {article.date && <span>{article.date}</span>}
+            <span>Read on LinkedIn ↗</span>
+          </span>
+        </a>
+      )}
     </section>
   );
 }

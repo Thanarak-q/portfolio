@@ -181,3 +181,21 @@ test("curriculum checker lets students plan missing required courses", async ({
   await page.getByRole("button", { name: /สร้างเทอม/i }).click();
   await expect(page.locator(".cc-term").filter({ hasText: "3/2564" })).toBeVisible();
 });
+
+test("writing section links images and captions to articles", async ({ page }) => {
+  await page.goto("/");
+
+  const section = page.locator("#focus");
+  await expect(section.getByRole("heading", { name: /written lately/i })).toBeAttached();
+
+  const articles = section.locator(".ir-article");
+  await expect(articles).toHaveCount(2);
+  await expect(articles.first()).toContainText("API Key Feature");
+  await expect(articles.nth(1)).toContainText("How I Used AI to Build My Portfolio");
+
+  for (const link of await section.locator(".ir-image a").all()) {
+    await expect(link).toHaveAttribute("href", /linkedin\.com\/pulse\//);
+    await expect(link).toHaveAttribute("target", "_blank");
+  }
+  await expect(section.locator(".ir-image a")).toHaveCount(2);
+});
