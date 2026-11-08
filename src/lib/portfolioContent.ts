@@ -36,12 +36,20 @@ export interface BookNote {
   spineWidth: "sm" | "md" | "lg";
 }
 
-export interface WorkItem {
+export interface UiWorkShot {
+  src: string;
+  alt: string;
+}
+
+export interface UiWork {
   number: string;
   title: string;
-  titleItalic?: string;
+  kind: string;
   description: string;
-  meta: string;
+  tags: string[];
+  shot: UiWorkShot;
+  /** Other pages of the same project, shown as a grid under the main shot. */
+  pages: (UiWorkShot & { label: string })[];
 }
 
 export interface ContactLink {
@@ -218,26 +226,70 @@ export const booksRead: BookNote[] = [
 
 export const workLines = ["Experience across", "<em>building and securing software.</em>"];
 
-export const workItems: WorkItem[] = [
+export const uiWorkIntro =
+  "Projects I designed and built end to end, from the first screen to the last page. Building the whole interface is how I learn where an application's trust boundaries really sit.";
+
+export const uiWorks: UiWork[] = [
   {
-    number: "001",
-    title: "Cyber Security Engineer",
-    titleItalic: "ITSC, Chiang Mai University",
+    number: "01",
+    title: "SmartMath",
+    kind: "AI learning platform",
     description:
-      "Cooperative education at the IT Service Center: conduct web application penetration testing, build threat-intelligence software for security monitoring and analysis, and report vulnerabilities while supporting remediation with the security team.",
-    meta: "2026 · ITSC / CMU",
+      "A Thai math-learning platform for CMU students. I designed it as a set of services with separate student and admin interfaces, authenticated API orchestration, streamed RAG tutoring through Kapi the AI helper, and durable background quiz generation. The whole UI is documented as a design system, with every route drawn as a screen.",
+    tags: ["Product UI", "Design system", "AI / RAG"],
+    shot: {
+      src: "/assets/work-smartmath-landing.webp",
+      alt: "SmartMath landing page with a live collage of the Kapi chat, a practice question and the league card",
+    },
+    pages: [
+      { label: "Home", src: "/assets/work-sm-home.webp", alt: "SmartMath home with the continue card, MathPro scores and weekly quests" },
+      { label: "Lesson + AI chat", src: "/assets/work-sm-chat.webp", alt: "A lesson with the Kapi chat open beside it, showing math answers and a source citation" },
+      { label: "Practice", src: "/assets/work-sm-practice.webp", alt: "A practice question with an area model, answer choices and a hint" },
+      { label: "Lessons", src: "/assets/work-sm-lessons.webp", alt: "The lessons page with colour-coded module cards and progress" },
+      { label: "League", src: "/assets/work-sm-league.webp", alt: "The weekly league leaderboard with promotion and demotion zones" },
+      { label: "Points shop", src: "/assets/work-sm-shop.webp", alt: "The points shop with profile frames, backdrops and a live preview" },
+      { label: "Profile", src: "/assets/work-sm-profile.webp", alt: "A learner profile with stats, weekly study time and mastery per course" },
+      { label: "Hall of Fame", src: "/assets/work-sm-hall.webp", alt: "The Hall of Fame word wall with a composer for new words" },
+    ],
   },
   {
-    number: "002",
-    title: "AI Engineer & System Architect",
-    titleItalic: "SmartMath",
+    number: "02",
+    title: "ALLCATFISH",
+    kind: "Fashion e-commerce store",
     description:
-      "Designed a service-oriented AI learning platform with separate student and admin interfaces, authenticated API orchestration, streamed RAG tutoring, durable background quiz generation, and purpose-specific data stores.",
-    meta: "2025 · SmartMath",
+      "An online store for the Allenaissance collection. A pinned cinematic hero floats Renaissance props around the model in 3D, then hands off to the shop, product pages with size selection, a bag, a journal and the brand story.",
+    tags: ["E-commerce", "Scroll motion", "3D parallax"],
+    shot: {
+      src: "/assets/work-allcatfish.webp",
+      alt: "ALLCATFISH hero: a model standing in a pearl shell surrounded by floating props over the sea",
+    },
+    pages: [
+      { label: "Shop", src: "/assets/work-ac-shop.webp", alt: "The shop grid with category filters and sorting" },
+      { label: "Product", src: "/assets/work-ac-product.webp", alt: "A product page with a photo gallery, sizes and add to bag" },
+      { label: "Bag", src: "/assets/work-ac-bag.webp", alt: "The shopping bag with quantity controls and an order summary" },
+      { label: "Journal", src: "/assets/work-ac-journal.webp", alt: "The journal with a featured story" },
+      { label: "About", src: "/assets/work-ac-about.webp", alt: "The brand story page over a coastal ruins banner" },
+    ],
+  },
+  {
+    number: "03",
+    title: "Nimbus",
+    kind: "Self-learning platform",
+    description:
+      "A learning platform where a small 3D island is the course map: every building is a lesson with a short quiz inside, and the island fills up as you learn. Twelve painted skies are generated and animated live on canvas.",
+    tags: ["3D world", "Canvas", "Learning"],
+    shot: {
+      src: "/assets/work-nimbus.webp",
+      alt: "Nimbus landing page titled Learn at your own pace, above a row of painted sky cards",
+    },
+    pages: [
+      { label: "Island world", src: "/assets/work-nimbus-world.webp", alt: "The 3D island world where each building is a lesson" },
+      { label: "Painted skies", src: "/assets/work-nimbus-skies.webp", alt: "The grid of animated painted skies to start from" },
+    ],
   },
 ];
 
-export const caseLines = ["Systems I built,", "<em>and the decisions behind them.</em>"];
+export const caseLines =["Systems I built,", "<em>and the decisions behind them.</em>"];
 
 export const caseIntro =
   "Selected systems, explained through what I built and the technical decisions behind it.";

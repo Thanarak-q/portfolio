@@ -179,3 +179,31 @@ test("reading page shows a review for every book", async ({ page }) => {
   await expect(review).toContainText("Harriet Farlow");
   await expect(review).toContainText("Reading now");
 });
+
+test("experience section showcases project UI with page galleries", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const showcase = page.locator("#work [data-ui-work]");
+  await expect(showcase).toHaveCount(1);
+  await expect(page.locator("#work .work-list")).toHaveCount(0);
+  await expect(showcase.locator("a")).toHaveCount(0);
+  await expect(showcase).not.toContainText(/concept|where i'd test/i);
+
+  const projects = showcase.locator("[data-ui-work-card]");
+  await expect(projects).toHaveCount(3);
+  for (const project of await projects.all()) {
+    expect(await project.locator(".pr-page").count()).toBeGreaterThan(1);
+  }
+
+  const srcs = await showcase
+    .locator("img")
+    .evaluateAll((imgs) => imgs.map((img) => img.getAttribute("src")));
+  expect(srcs.length).toBeGreaterThan(10);
+  for (const src of srcs) {
+    expect(src).toMatch(/^\/assets\/work-.+\.webp$/);
+    const res = await page.request.get(src!);
+    expect(res.ok()).toBe(true);
+  }
+});

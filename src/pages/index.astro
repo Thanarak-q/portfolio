@@ -3,11 +3,12 @@ import Base from "../layouts/Base.astro";
 import ScrollInit from "../components/ScrollInit";
 import HeroClip from "../components/HeroClip";
 import SlideUpClip from "../components/SlideUpClip";
-import { RiseIn, SlideIn, ScaleIn, LineReveal } from "../components/Reveal";
+import { RiseIn, LineReveal } from "../components/Reveal";
 import WriteupGallery from "../components/WriteupGallery";
 import PyramidFlip from "../components/PyramidFlip";
 import RoleSlide from "../components/RoleSlide";
 import BookShelf from "../components/BookShelf";
+import ProjectReel from "../components/ProjectReel";
 import {
   aboutLines,
   aboutStats,
@@ -16,7 +17,8 @@ import {
   contactLinks,
   focusItems,
   navLinks,
-  workItems,
+  uiWorkIntro,
+  uiWorks,
   workLines,
 } from "../lib/portfolioContent";
 ---
@@ -121,27 +123,12 @@ import {
         lines={workLines}
       />
 
-      <div class="work-list glass-liquid">
-        {workItems.map((item, index) => (
-          <SlideIn
-            client:load
-            dir="right"
-            distance={120}
-            delay={0.04 + index * 0.05}
-          >
-            <div class:list={["row", { "row-sep": index > 0 }]}>
-              <div class="num">{item.number}</div>
-              <div class="title">
-                {item.title}{" "}
-                {item.titleItalic && <span class="it">{item.titleItalic}</span>}
-              </div>
-              <div class="desc">{item.description}</div>
-              <div class="meta">{item.meta}</div>
-            </div>
-          </SlideIn>
-        ))}
-      </div>
+      <RiseIn client:load distance={32}>
+        <p class="work-intro">{uiWorkIntro}</p>
+      </RiseIn>
     </div>
+
+    <ProjectReel client:load works={uiWorks} />
   </section>
 
   <!-- CONTACT -->
