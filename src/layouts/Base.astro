@@ -2,9 +2,13 @@
 interface Props {
   title?: string;
   description?: string;
+  // Pages reached from in-site links (e.g. /reading) skip the intro loader so
+  // the view transition isn't hidden behind it.
+  loader?: boolean;
 }
 const {
   title = "Thanarak Kanyaprasit — Cybersecurity & Penetration Testing",
+  loader = true,
   description = "Final-year Computer Science student at Chiang Mai University working in cybersecurity and penetration testing, growing toward product security — securing applications across the development lifecycle.",
 } = Astro.props;
 ---
@@ -29,15 +33,17 @@ const {
       rel="stylesheet"
     />
   </head>
-  <body class="is-loading">
-    <div class="site-loader" data-site-loader aria-hidden="true">
-      <div class="site-loader-inner">
-        <span class="site-loader-kicker">Thanarak</span>
-        <span class="site-loader-count" data-loader-count>001</span>
-        <span class="site-loader-title">loading portfolio</span>
-        <span class="site-loader-rule"><span data-loader-rule></span></span>
+  <body class={loader ? "is-loading" : "is-loaded"}>
+    {loader && (
+      <div class="site-loader" data-site-loader aria-hidden="true">
+        <div class="site-loader-inner">
+          <span class="site-loader-kicker">Thanarak</span>
+          <span class="site-loader-count" data-loader-count>001</span>
+          <span class="site-loader-title">loading portfolio</span>
+          <span class="site-loader-rule"><span data-loader-rule></span></span>
+        </div>
       </div>
-    </div>
+    )}
     <slot />
     <div class="atmo grain" aria-hidden="true"></div>
     <div class="atmo vignette" aria-hidden="true"></div>
@@ -117,7 +123,7 @@ const {
         });
       };
 
-      revealPage();
+      if (loader) revealPage();
     </script>
   </body>
 </html>

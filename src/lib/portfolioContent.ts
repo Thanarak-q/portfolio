@@ -18,6 +18,9 @@ export interface FocusItem {
   name: string;
   src: string;
   alt: string;
+  tags?: string[];
+  // Label for write-ups without an article yet; defaults to "In progress".
+  status?: string;
   article?: FocusArticle;
 }
 
@@ -25,6 +28,8 @@ export interface BookNote {
   title: string;
   shortTitle: string;
   subtitle: string;
+  author?: string;
+  status: "read" | "reading";
   tag: string;
   note: string;
   palette: "ink" | "leak" | "cream" | "soft" | "rose";
@@ -83,9 +88,8 @@ export interface CaseStudy {
 
 export const navLinks: NavLink[] = [
   { href: "#about", label: "About" },
-  { href: "#focus", label: "Focus" },
+  { href: "#focus", label: "Writing" },
   { href: "#work", label: "Work" },
-  { href: "#cases", label: "Projects" },
 ];
 
 export const aboutLines: string[] = [];
@@ -95,8 +99,9 @@ export const aboutStats: StatItem[] = [];
 export const focusItems: FocusItem[] = [
   {
     name: "API Keys",
-    src: "/assets/chair.png",
+    src: "/assets/chair-card.webp",
     alt: "Empty chair, low light",
+    tags: ["System design", "Threat modeling"],
     article: {
       title:
         "[WRITE-UP] การออกแบบ API Key Feature ด้วย System Design และ Threat Modeling",
@@ -106,26 +111,28 @@ export const focusItems: FocusItem[] = [
   },
   {
     name: "Built with AI",
-    src: "/assets/flower.png",
+    src: "/assets/flower-card.webp",
     alt: "Single flower, close crop",
+    tags: ["AI", "Build log"],
     article: {
       title: "How I Used AI to Build My Portfolio",
       href: "https://www.linkedin.com/pulse/how-i-used-ai-build-my-portfolio-thanarak-kanyaprasit-zf9ac",
     },
   },
   {
-    name: "Threat Intel",
-    src: "/assets/moutainandbird.png",
+    name: "AI Red Team",
+    status: "Writing",
+    src: "/assets/moutainandbird-card.webp",
     alt: "Mountain ridge with bird",
   },
   {
     name: "Field Notes",
-    src: "/assets/bird.png",
+    src: "/assets/bird-card.webp",
     alt: "Bird in flight",
   },
   {
     name: "Custom Tooling",
-    src: "/assets/flowerandbird.png",
+    src: "/assets/flowerandbird-card.webp",
     alt: "Flower with bird",
   },
 ];
@@ -135,6 +142,8 @@ export const booksRead: BookNote[] = [
     title: "Bug Bounty Bootcamp by Vickie Li",
     shortTitle: "Bug Bounty Bootcamp",
     subtitle: "The Guide to Finding and Reporting Web Vulnerabilities",
+    author: "Vickie Li",
+    status: "read",
     tag: "Web hacking · methodology",
     note: "A clear starting point for web penetration testing, with a structured path through the core techniques.",
     palette: "leak",
@@ -144,6 +153,8 @@ export const booksRead: BookNote[] = [
     title: "The Web Application Hacker's Handbook 2ed",
     shortTitle: "WAHH",
     subtitle: "Finding and Exploiting Security Flaws",
+    author: "Dafydd Stuttard & Marcus Pinto",
+    status: "read",
     tag: "Web hacking · canonical",
     note: "Where you go for the technique. Detailed, slow, methodical — the kind of book you keep open next to a target and read alongside the actual work.",
     palette: "cream",
@@ -153,6 +164,8 @@ export const booksRead: BookNote[] = [
     title: "Web Hacking 101 by Peter Yaworski",
     shortTitle: "Web Hacking 101",
     subtitle: "Real-world bug reports, dissected",
+    author: "Peter Yaworski",
+    status: "read",
     tag: "Case studies · bug bounty",
     note: "Reading other people's disclosed reports beats any course. You start seeing the same patterns — IDOR, SSRF, race conditions — show up in your own targets within a week.",
     palette: "soft",
@@ -162,15 +175,29 @@ export const booksRead: BookNote[] = [
     title: "AI Red Teaming",
     shortTitle: "AI Red Teaming",
     subtitle: "Data, training, output — the full kill chain",
+    status: "reading",
     tag: "AI security · in progress",
     note: "Still reading. It frames prompt injection as one part of a wider attack surface across data, training, and agent workflows.",
     palette: "rose",
     spineWidth: "md",
   },
   {
+    title: "Practical AI Security by Harriet Farlow",
+    shortTitle: "Practical AI Security",
+    subtitle: "A Hands-on Guide to Attacking, Defending, and Securing Modern AI Systems",
+    author: "Harriet Farlow",
+    status: "reading",
+    tag: "AI security · hands-on",
+    note: "Currently reading. A hands-on companion to AI red teaming — working through how modern AI systems are attacked, and how to defend and secure them in practice.",
+    palette: "ink",
+    spineWidth: "md",
+  },
+  {
     title: "Threat Modeling: Designing for Security by Adam Shostack",
     shortTitle: "Threat Modeling",
     subtitle: "Designing for Security",
+    author: "Adam Shostack",
+    status: "read",
     tag: "Secure design · methodology",
     note: "This book teaches threat modeling as a step-by-step process, including how to get started, which methods and techniques to use, how to document and report the findings, and how to discuss security concerns with development teams so everyone shares the same understanding and can use the results to build a more secure system.",
     palette: "leak",
@@ -180,6 +207,8 @@ export const booksRead: BookNote[] = [
     title: "The Hacker Playbook 3: Practical Guide to Penetration Testing",
     shortTitle: "Hacker Playbook 3",
     subtitle: "Practical Guide to Penetration Testing",
+    author: "Peter Kim",
+    status: "read",
     tag: "Red team · field manual",
     note: "Clarifies the distinction between penetration testing and red teaming: a pentest finds vulnerabilities within scope, while a red-team exercise pursues an objective and tests detection and response.",
     palette: "ink",
@@ -349,3 +378,10 @@ export const contactLinks: ContactLink[] = [
     external: true,
   },
 ];
+
+// URL-safe id for a book, used by the homepage shelf and /reading#<slug>.
+export const bookSlug = (book: BookNote) =>
+  book.shortTitle
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");

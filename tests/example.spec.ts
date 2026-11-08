@@ -27,57 +27,11 @@ test("homepage renders core sections", async ({ page }) => {
   ).toHaveAttribute("href", "mailto:thanarak_ka@cmu.ac.th");
 });
 
-const scrollToDeckProgress = async (page: Page, progress: number) => {
-  await page.evaluate(async (p) => {
-    const deck = document.querySelector<HTMLElement>(".case-deck");
-    if (!deck) return;
-    const top = deck.getBoundingClientRect().top + window.scrollY;
-    const y = top + (deck.offsetHeight - window.innerHeight) * p;
-    // Repeat across frames so smooth-scroll libs can't drift the position
-    for (let i = 0; i < 12; i++) {
-      window.scrollTo(0, y);
-      await new Promise((r) => requestAnimationFrame(r));
-    }
-  }, progress);
-};
-
-test("case files deck reveals both case studies on scroll", async ({ page }) => {
+test("project section is removed", async ({ page }) => {
   await page.goto("/");
 
-  await expect(page.getByRole("link", { name: "Projects" })).toHaveAttribute(
-    "href",
-    "#cases"
-  );
-
-  await scrollToDeckProgress(page, 0.25);
-  await expect(page.getByRole("heading", { name: "SmartMath" })).toBeVisible();
-  await scrollToDeckProgress(page, 0.4);
-  const architecture = page.locator(".wire-arch");
-  await expect(architecture.getByText("backend api", { exact: true })).toBeVisible();
-  await expect(architecture.getByText("ai service", { exact: true })).toBeVisible();
-  await expect(architecture.getByText("message broker", { exact: true })).toBeVisible();
-  await expect(architecture.getByText("ai worker", { exact: true })).toBeVisible();
-  await expect(architecture.getByText("ai dependencies", { exact: true })).toBeVisible();
-  await expect(architecture.getByText("data services", { exact: true })).toBeVisible();
-  await expect(architecture.getByText(/interactive · streaming/i)).toBeVisible();
-  await expect(architecture.getByText(/async · durable/i)).toBeVisible();
-
-  await scrollToDeckProgress(page, 0.8);
-  await expect(
-    page.getByRole("heading", { name: "Village Security Platform" })
-  ).toBeVisible();
-  await expect(page.getByText("Contributed to core flows")).toBeVisible();
-});
-
-test("mobile project card keeps the SmartMath contribution summary visible", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
-
-  await scrollToDeckProgress(page, 0.25);
-  await expect(page.locator(".cd-panel").first().locator(".cf-mobile-summary"))
-    .toHaveText("Built RAG chat, ingestion, and async quiz generation.");
+  await expect(page.locator("#cases")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Projects" })).toHaveCount(0);
 });
 
 test("homepage does not disclose SmartMath infrastructure vendors", async ({
@@ -182,20 +136,46 @@ test("curriculum checker lets students plan missing required courses", async ({
   await expect(page.locator(".cc-term").filter({ hasText: "3/2564" })).toBeVisible();
 });
 
-test("writing section links images and captions to articles", async ({ page }) => {
+test("writing section shows write-ups as a gallery linking to articles", async ({
+  page,
+}) => {
   await page.goto("/");
 
   const section = page.locator("#focus");
   await expect(section.getByRole("heading", { name: /written lately/i })).toBeAttached();
 
-  const articles = section.locator(".ir-article");
-  await expect(articles).toHaveCount(2);
-  await expect(articles.first()).toContainText("API Key Feature");
-  await expect(articles.nth(1)).toContainText("How I Used AI to Build My Portfolio");
+  await expect(section.locator(".wg-card")).toHaveCount(5);
 
-  for (const link of await section.locator(".ir-image a").all()) {
+  const links = section.locator("a.wg-card");
+  await expect(links).toHaveCount(2);
+  await expect(links.first()).toContainText("API Key Feature");
+  await expect(links.nth(1)).toContainText("How I Used AI to Build My Portfolio");
+  for (const link of await links.all()) {
     await expect(link).toHaveAttribute("href", /linkedin\.com\/pulse\//);
     await expect(link).toHaveAttribute("target", "_blank");
   }
-  await expect(section.locator(".ir-image a")).toHaveCount(2);
+});
+
+test("reading bookcase opens each review in a new tab", async ({ page }) => {
+  await page.goto("/");
+
+  const shelf = page.locator("#reading");
+  const books = shelf.locator("a.bc-book");
+  await expect(books).toHaveCount(7);
+  await expect(books.first()).toHaveAttribute("href", "/reading#bug-bounty-bootcamp");
+  await expect(books.first()).toHaveAttribute("target", "_blank");
+  await expect(shelf.locator("a.bc-drawer")).toHaveAttribute("href", "/reading");
+  await expect(shelf.locator("a.bc-drawer")).toHaveAttribute("target", "_blank");
+});
+
+test("reading page shows a review for every book", async ({ page }) => {
+  await page.goto("/reading#practical-ai-security");
+
+  await expect(page.getByRole("heading", { level: 1, name: /Books I've read/i })).toBeVisible();
+  await expect(page.locator("article.rv")).toHaveCount(7);
+
+  const review = page.locator("#practical-ai-security");
+  await expect(review).toBeInViewport();
+  await expect(review).toContainText("Harriet Farlow");
+  await expect(review).toContainText("Reading now");
 });

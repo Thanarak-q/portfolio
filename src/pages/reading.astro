@@ -1,0 +1,73 @@
+---
+import Base from "../layouts/Base.astro";
+import { bookSlug, booksRead } from "../lib/portfolioContent";
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const reading = booksRead.filter((b) => b.status === "reading").length;
+---
+
+<Base
+  title="Reading list — Thanarak Kanyaprasit"
+  description="Security books Thanarak Kanyaprasit has read or is reading, with a short review of each."
+  loader={false}
+>
+  <nav class="nav glass-liquid" aria-label="Primary">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <span class="brand-name">thanarak</span>
+      <span class="role-mini">/ cybersecurity</span>
+    </div>
+    <div class="nav-links">
+      <a href="/#about">About</a>
+      <a href="/#focus">Writing</a>
+      <a href="/#work">Work</a>
+      <a href="/reading" class="is-active" aria-current="page">Reading</a>
+    </div>
+    <a class="nav-cta" href="/#contact">Contact</a>
+  </nav>
+
+  <main class="rd-page">
+    <header class="rd-head">
+      <a class="rd-back" href="/#reading">← Back to the shelf</a>
+      <h1 class="rd-title">Books I've <em>read.</em></h1>
+      <p class="rd-meta">
+        {pad(booksRead.length)} books · {pad(reading)} reading now
+      </p>
+    </header>
+
+    <ol class="rd-list">
+      {booksRead.map((book, i) => (
+        <li>
+          <article id={bookSlug(book)} class="rv">
+            <div class:list={["rv-cover", `bk--${book.palette}`]} aria-hidden="true">
+              <span class="rv-cover-num">No. {pad(i + 1)}</span>
+              <span class="rv-cover-title">{book.shortTitle}</span>
+              <span class="rv-cover-author">{book.author ?? ""}</span>
+            </div>
+
+            <div class="rv-body">
+              <div class="rv-tags">
+                <span class:list={["rv-status", `rv-status--${book.status}`]}>
+                  {book.status === "reading" ? "Reading now" : "Finished"}
+                </span>
+                <span class="rv-tag">{book.tag}</span>
+              </div>
+              <h2 class="rv-title">{book.shortTitle}</h2>
+              <p class="rv-sub">
+                {book.subtitle}
+                {book.author && <span> — {book.author}</span>}
+              </p>
+              <p class="rv-note">{book.note}</p>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ol>
+
+    <footer class="rd-foot">
+      <a class="link-pill" href="/#reading">
+        <span>Back to the portfolio</span><span class="arrow">↗</span>
+      </a>
+    </footer>
+  </main>
+</Base>

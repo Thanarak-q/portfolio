@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIsomorphicLayoutEffect } from "../lib/useIsomorphicLayoutEffect";
+import { useSceneFade } from "../lib/useSceneFade";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,6 +19,8 @@ const absBack: React.CSSProperties = {
 
 export default function PyramidFlip() {
   const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  useSceneFade(sectionRef, stickyRef, { fadeOut: false });
 
   const f0 = useRef<HTMLSpanElement>(null);
   const b0 = useRef<HTMLSpanElement>(null);
@@ -75,7 +78,7 @@ export default function PyramidFlip() {
       id="about"
       style={{ height: `${RUNWAY}vh`, position: "relative" }}
     >
-      <div className="about-pin">
+      <div ref={stickyRef} className="about-pin">
         <div className="wrap">
           <div className="eyebrow">01 — Who</div>
 

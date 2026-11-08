@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIsomorphicLayoutEffect } from "../lib/useIsomorphicLayoutEffect";
+import { createVideoScrubber } from "../lib/videoScrub";
+import { useSceneFade } from "../lib/useSceneFade";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -30,6 +32,8 @@ export default function HeroClip({
   portalLabel,
 }: HeroClipProps) {
   const sectionRef = useRef<HTMLElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  useSceneFade(sectionRef, stickyRef, { fadeIn: false });
   const videoRef = useRef<HTMLVideoElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const leakRef = useRef<HTMLDivElement>(null);
@@ -60,6 +64,8 @@ export default function HeroClip({
     const SCRUB_END = 0.65;
     const PORTAL_START = 0.62;
 
+    const scrubber = createVideoScrubber(video);
+
     const st = ScrollTrigger.create({
       trigger: section,
       start: "top top",
@@ -77,9 +83,7 @@ export default function HeroClip({
             sp >= SCRUB_END
               ? dur - 0.05
               : (sp / SCRUB_END) * (dur - 0.05);
-          if (Math.abs(video.currentTime - t) > 0.02) {
-            try { video.currentTime = t; } catch {}
-          }
+          scrubber.seek(t);
         }
 
         // Title overlay fades out early in scroll
@@ -112,7 +116,10 @@ export default function HeroClip({
       },
     });
 
-    return () => st.kill();
+    return () => {
+      st.kill();
+      scrubber.destroy();
+    };
   }, []);
 
   return (
@@ -122,7 +129,7 @@ export default function HeroClip({
       className="scroll-clip"
       style={{ height: `${runwayVH}vh` }}
     >
-      <div className="clip-sticky">
+      <div ref={stickyRef} className="clip-sticky">
         <div className="clip-stage">
           <video ref={videoRef} src={src} muted playsInline preload="auto" />
           <div className="film-tint" />

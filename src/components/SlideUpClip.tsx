@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useIsomorphicLayoutEffect } from "../lib/useIsomorphicLayoutEffect";
+import { createVideoScrubber } from "../lib/videoScrub";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,15 +61,20 @@ export default function SlideUpClip({
     // pinning range = (runwayVH - 100)vh of actual scroll.
     //
     // Phases (as fraction of trigger progress):
-    //   0  →  SU_END   : slide-up (clip rises from below)        — 1vh of scroll
-    //   SU_END → EXIT  : video scrub
-    //   EXIT_START → 1 : exit (up or left)                       — 1vh of scroll
-    const totalUnits = runwayVH / 100 - 1;           // e.g. 3 for runwayVH=400
-    const SU_END = 1 / totalUnits;                   // 0.333
-    const EXIT_START = 1 - 1 / totalUnits;           // 0.667
+    //   0 → EXIT_START : video scrub
+    //   EXIT_START → 1 : exit left (1vh of scroll)
+    // The clip "slides up" simply by scrolling in with the section, so there
+    // is no blank screen before it, and an "up" exit just scrolls away with
+    // the page instead of leaving an empty pinned screen behind.
+    const totalUnits = runwayVH / 100 - 1;           // e.g. 2 for runwayVH=300
+    const hasExit = exitDirection === "left";
+    const SU_END = 0;
+    const EXIT_START = hasExit ? 1 - 1 / totalUnits : 1;
     const EXIT_END = 1;
     const SCRUB_START = SU_END;
     const SCRUB_END = EXIT_START;
+
+    const scrubber = createVideoScrubber(video);
 
     const st = ScrollTrigger.create({
       trigger: section,
@@ -78,17 +84,12 @@ export default function SlideUpClip({
       onUpdate(self) {
         const rp = self.progress;
 
-        // ── Slide-up: stage transforms from 100% (below) → 0% (covering)
-        const slideT = clamp01(rp / SU_END);
-        const ty = (1 - slideT) * 100;                // 100 → 0 (percent of own height)
-
         // ── Exit
-        const exitT = clamp01((rp - EXIT_START) / (EXIT_END - EXIT_START));
+        const exitT = hasExit ? clamp01((rp - EXIT_START) / (EXIT_END - EXIT_START)) : 0;
         const eExit = easeOutCubic(exitT);
-        const exitY = exitDirection === "up" ? eExit * -100 : 0;
-        const exitX = exitDirection === "left" ? eExit * -100 : 0;
+        const exitX = hasExit ? eExit * -100 : 0;
 
-        stage.style.transform = `translate3d(${exitX}%, ${ty + exitY}%, 0)`;
+        stage.style.transform = `translate3d(${exitX}%, 0, 0)`;
 
         // ── Video scrub
         const dur = video.duration;
@@ -97,19 +98,12 @@ export default function SlideUpClip({
           if (rp <= SCRUB_START) t = 0;
           else if (rp >= SCRUB_END) t = dur - 0.05;
           else t = ((rp - SCRUB_START) / (SCRUB_END - SCRUB_START)) * (dur - 0.05);
-          if (Math.abs(video.currentTime - t) > 0.02) {
-            try { video.currentTime = t; } catch {}
-          }
+          scrubber.seek(t);
         }
 
         // ── Overlay text fades in after slide-up, out during exit
         const textIn = clamp01((rp - SU_END) / 0.08);
-        const textOp =
-          rp < SU_END
-            ? 0
-            : exitT > 0
-              ? Math.max(0, 1 - exitT * 2.2)
-              : textIn;
+        const textOp = exitT > 0 ? Math.max(0, 1 - exitT * 2.2) : textIn;
         if (overlayRef.current) overlayRef.current.style.opacity = String(textOp);
 
         // ── Leak streak
@@ -136,7 +130,10 @@ export default function SlideUpClip({
       },
     });
 
-    return () => st.kill();
+    return () => {
+      st.kill();
+      scrubber.destroy();
+    };
   }, [runwayVH, exitDirection]);
 
   return (
